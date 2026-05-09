@@ -27,7 +27,7 @@ if [ -d "birthday" ]; then
     git pull
 else
     echo "📥 Cloning birthday repository..."
-    git clone https://github.com/PREXYZVILLATECH/birthday.git
+    git clone https://github.com/PREXZYVILLATECH/birthday.git
     cd birthday
 fi
 
