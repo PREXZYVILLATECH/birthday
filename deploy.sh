@@ -39,7 +39,7 @@ npm install
 
 # 4. Create PM2 ecosystem file (FIXED VERSION)
 echo "⚙️ Creating PM2 config..."
-rm -f ecosystem.config.js  # ← FORCE DELETE OLD BAD FILE
+rm -f ecosystem.config.js
 cat > ecosystem.config.js << 'EOF'
 module.exports = {
   apps: [{
@@ -61,13 +61,20 @@ pm2 start ecosystem.config.js
 pm2 save
 pm2 startup
 
-# 6. Configure Nginx as reverse proxy
+# 6. Configure Nginx as reverse proxy (FIXED - removes port & handles routing correctly)
 echo "🌐 Setting up Nginx reverse proxy..."
+
+# Remove old birthday config if exists
+sudo rm -f /etc/nginx/sites-available/birthday
+sudo rm -f /etc/nginx/sites-enabled/birthday
+
+# Create new birthday config
 sudo tee /etc/nginx/sites-available/birthday > /dev/null << 'EOF'
 server {
-    listen 80;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     server_name nicky.prexzyvilla.site;
-
+    
     location / {
         proxy_pass http://127.0.0.1:8081;
         proxy_http_version 1.1;
@@ -83,15 +90,29 @@ EOF
 
 # 7. Enable the Nginx site
 sudo ln -sf /etc/nginx/sites-available/birthday /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
-sudo nginx -t
-sudo systemctl restart nginx
 
-# 8. Open firewall
+# 8. Make sure API config doesn't steal the default port
+if [ -f /etc/nginx/sites-available/apis.prexzyvilla.site ]; then
+    sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/apis.prexzyvilla.site 2>/dev/null || true
+    sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/apis.prexzyvilla.site 2>/dev/null || true
+fi
+
+# 9. Test and reload Nginx
+sudo nginx -t
+sudo systemctl reload nginx
+
+# 10. Open firewall
 sudo ufw allow 80/tcp 2>/dev/null || true
 sudo ufw allow 443/tcp 2>/dev/null || true
 
 echo "✅ Deployment complete!"
 echo "🌍 Visit: http://nicky.prexzyvilla.site"
-echo "📊 PM2 status: pm2 status"
-echo "📜 PM2 logs: pm2 logs birthday"
+echo ""
+echo "📊 To add SSL/HTTPS later (optional):"
+echo "   sudo apt install certbot python3-certbot-nginx -y"
+echo "   sudo certbot --nginx -d nicky.prexzyvilla.site"
+echo ""
+echo "📊 Useful commands:"
+echo "   pm2 status          - Check if running"
+echo "   pm2 logs birthday   - View logs"
+echo "   sudo nginx -t       - Test Nginx config"
