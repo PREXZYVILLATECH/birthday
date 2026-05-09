@@ -20,9 +20,11 @@ sudo apt install -y nodejs
 sudo npm install -g pm2
 
 # 2. Clone or update the repository
+sudo mkdir -p /var/www
 cd /var/www
 if [ -d "birthday" ]; then
     echo "📁 Repository exists, pulling latest changes..."
+    sudo chown -R $(whoami) birthday
     cd birthday
     git pull
 else
@@ -35,14 +37,14 @@ fi
 echo "📦 Installing npm packages..."
 npm install
 
-# 4. Create PM2 ecosystem file (so it runs forever)
+# 4. Create PM2 ecosystem file (FIXED VERSION)
 echo "⚙️ Creating PM2 config..."
-cat > ecosystem.config.js << EOF
+cat > ecosystem.config.js << 'EOF'
 module.exports = {
   apps: [{
     name: 'birthday',
-    script: 'http-server',
-    args: '-p 8081',
+    script: 'npx',
+    args: 'http-server -p 8081',
     cwd: '/var/www/birthday',
     env: {
       NODE_ENV: 'production'
@@ -60,7 +62,7 @@ pm2 startup
 
 # 6. Configure Nginx as reverse proxy (removes the :8081 port)
 echo "🌐 Setting up Nginx reverse proxy..."
-sudo tee /etc/nginx/sites-available/birthday > /dev/null << EOF
+sudo tee /etc/nginx/sites-available/birthday > /dev/null << 'EOF'
 server {
     listen 80;
     server_name nicky.prexzyvilla.site;
@@ -68,12 +70,12 @@ server {
     location / {
         proxy_pass http://127.0.0.1:8081;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }
 EOF
