@@ -39,6 +39,7 @@ npm install
 
 # 4. Create PM2 ecosystem file (FIXED VERSION)
 echo "⚙️ Creating PM2 config..."
+rm -f ecosystem.config.js  # ← FORCE DELETE OLD BAD FILE
 cat > ecosystem.config.js << 'EOF'
 module.exports = {
   apps: [{
@@ -60,7 +61,7 @@ pm2 start ecosystem.config.js
 pm2 save
 pm2 startup
 
-# 6. Configure Nginx as reverse proxy (removes the :8081 port)
+# 6. Configure Nginx as reverse proxy
 echo "🌐 Setting up Nginx reverse proxy..."
 sudo tee /etc/nginx/sites-available/birthday > /dev/null << 'EOF'
 server {
@@ -82,11 +83,11 @@ EOF
 
 # 7. Enable the Nginx site
 sudo ln -sf /etc/nginx/sites-available/birthday /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default  # Remove default site
-sudo nginx -t  # Test configuration
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo nginx -t
 sudo systemctl restart nginx
 
-# 8. Open firewall (if UFW is active)
+# 8. Open firewall
 sudo ufw allow 80/tcp 2>/dev/null || true
 sudo ufw allow 443/tcp 2>/dev/null || true
 
