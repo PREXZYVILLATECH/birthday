@@ -5,9 +5,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;600&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="stylesheet.css">
-  <link rel="stylesheet/less" href="cake.less">
-  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.1.0/less.min.js"></script>
   <style>
     :root {
       --blue-1: #0a0e1a;
@@ -71,7 +68,7 @@
 
     audio { display: none; }
 
-    /* BALLOONS */
+    /* BALLOONS - Now just 3 balloons for HBD */
     .balloons {
       position: fixed;
       bottom: -220px;
@@ -91,13 +88,10 @@
       text-align: center;
       line-height: 170px;
     }
-    #b1 { background-image: url('b1.png'); left: 2%; }
-    #b2 { background-image: url('b2.png'); left: 16%; }
-    #b3 { background-image: url('b3.png'); left: 30%; }
-    #b4 { background-image: url('b4.png'); left: 44%; }
-    #b5 { background-image: url('b5.png'); left: 58%; }
-    #b6 { background-image: url('b6.png'); left: 72%; }
-    #b7 { background-image: url('b7.png'); left: 86%; }
+    /* 3 balloons for HBD */
+    #b1 { background-image: url('b1.png'); left: 15%; }
+    #b2 { background-image: url('b2.png'); left: 45%; }
+    #b3 { background-image: url('b3.png'); left: 75%; }
 
     .balloon-border {
       position: fixed;
@@ -125,6 +119,7 @@
       justify-content: space-around;
       padding: 24px 0 0;
       position: relative;
+      flex-wrap: wrap;
     }
     .bulb-row::before {
       content: '';
@@ -179,24 +174,28 @@
     }
     .divider-gem { color: #c9a84c; font-size: 15px; }
 
-    /* CAKE */
+    /* CAKE - CENTERED */
     .cake-section {
       display: flex;
       justify-content: center;
+      align-items: center;
       padding: 40px 0 20px;
+      width: 100%;
     }
     .cake {
       position: relative;
       display: none;
       width: 300px;
       height: 300px;
+      margin: 0 auto;
     }
     .cake:after {
       background: rgba(255,255,255,0.9);
       border-radius: 300px;
       content: "";
       position: absolute;
-      bottom: 0; left: 0;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
       width: 300px; height: 6px;
     }
     .velas {
@@ -272,7 +271,7 @@
     .bizcocho:after  { top: 30%; left: 0; }
     .bizcocho:before { top: 60%; left: 0; }
 
-    /* MESSAGE */
+    /* MESSAGE - Typing effect style */
     .message-section {
       display: none;
       padding: 60px 10px 40px;
@@ -305,6 +304,7 @@
       box-shadow: 0 20px 60px rgba(0,0,20,0.55), inset 0 1px 0 rgba(255,255,255,0.04);
       position: relative;
       overflow: hidden;
+      min-height: 400px;
     }
     .message-card::before {
       content: '';
@@ -324,6 +324,7 @@
       text-align: center;
       font-style: italic;
       font-weight: 300;
+      transition: opacity 0.5s ease;
     }
     .message-line.strong {
       font-style: normal;
@@ -341,11 +342,18 @@
     }
     .message-line.visible {
       display: block;
-      animation: fadeUp 0.9s ease forwards;
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .message-line.hiding {
+      animation: fadeDown 0.5s ease forwards;
     }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(-16px); display: none; }
     }
     .message-line.spacer { display: block; height: 18px; animation: none; opacity: 1; }
 
@@ -354,6 +362,7 @@
       margin-top: 36px;
       padding-top: 28px;
       border-top: 1px solid rgba(100,170,255,0.14);
+      display: none;
     }
     .message-signature p {
       color: #6ab0ff;
@@ -422,9 +431,17 @@
       background: rgba(201,168,76,0.08);
     }
 
+    /* Mobile responsive - Center cake */
     @media (max-width: 600px) {
       .message-card { padding: 28px 18px; }
       .btn-wish { font-size: 9.5px; padding: 8px 10px; }
+      .cake-section {
+        justify-content: center;
+      }
+      .cake {
+        margin: 0 auto;
+        left: 0;
+      }
     }
   </style>
 </head>
@@ -439,14 +456,10 @@
 
 <audio id="song" loop><source src="hbd.mp3"></audio>
 
-<!-- BALLOONS -->
+<!-- 3 BALLOONS for HBD -->
 <div class="balloons" id="b1"><h2 style="color:#6ab0ff;">H</h2></div>
-<div class="balloons" id="b2"><h2 style="color:#a0cfff;">A</h2></div>
-<div class="balloons" id="b3"><h2 style="color:#4a90d9;">P</h2></div>
-<div class="balloons" id="b4"><h2 style="color:#c9a84c;">P</h2></div>
-<div class="balloons" id="b5"><h2 style="color:#6ab0ff;">Y</h2></div>
-<div class="balloons" id="b6"><h2 style="color:#a0cfff;">💙</h2></div>
-<div class="balloons" id="b7"><h2 style="color:#4a90d9;">!</h2></div>
+<div class="balloons" id="b2"><h2 style="color:#c9a84c;">B</h2></div>
+<div class="balloons" id="b3"><h2 style="color:#4a90d9;">D</h2></div>
 
 <img src="Balloon-Border.png" class="balloon-border" id="balloon-border">
 
@@ -489,77 +502,9 @@
     </div>
     <div class="divider"><span class="divider-gem">✦</span></div>
     <div class="message-card" id="message-card">
-
-      <p class="message-line">Today, the universe decided to celebrate</p>
-      <p class="message-line">the day you came into this world —</p>
-      <p class="message-line">and honestly, how could it not?</p>
-      <p class="message-line strong">Happy Birthday, Nicky. 💙</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">I've been trying to find the right words</p>
-      <p class="message-line">to describe what you mean to me,</p>
-      <p class="message-line">and I keep running out of language.</p>
-      <p class="message-line">Because some people are simply beyond words.</p>
-      <p class="message-line">You are one of those people.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">You have this rare and beautiful gift —</p>
-      <p class="message-line">you make everyone around you feel seen,</p>
-      <p class="message-line">feel heard, feel safe.</p>
-      <p class="message-line">In a world that can be loud and unkind,</p>
-      <p class="message-line">you are a quiet and steady kind of warmth.</p>
-      <p class="message-line">The kind that stays.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">Thank you for every conversation,</p>
-      <p class="message-line">every word of encouragement you offered</p>
-      <p class="message-line">when I needed it most —</p>
-      <p class="message-line">even when you had your own storms to weather.</p>
-      <p class="message-line">That is who you are, Nicky.</p>
-      <p class="message-line">Someone who shows up. Every single time.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">Your kindness isn't performative.</p>
-      <p class="message-line">It is genuine, deep, and effortless.</p>
-      <p class="message-line">You care in ways most people have forgotten how to.</p>
-      <p class="message-line">And that is not a small thing.</p>
-      <p class="message-line strong">That is everything.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">The distance between us changes nothing.</p>
-      <p class="message-line">You are one of the most real friendships I have.</p>
-      <p class="message-line">Online or not, near or far,</p>
-      <p class="message-line">you have carved a place in my life</p>
-      <p class="message-line">that no one else could ever fill.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">On this birthday, I want you to feel</p>
-      <p class="message-line">every bit of the love you pour into others</p>
-      <p class="message-line">poured right back into you.</p>
-      <p class="message-line">I want you to rest in knowing</p>
-      <p class="message-line">that you are deeply, genuinely treasured —</p>
-      <p class="message-line">not for what you do,</p>
-      <p class="message-line">but simply for who you are.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">May this year bring you everything</p>
-      <p class="message-line">your beautiful heart deserves.</p>
-      <p class="message-line">Peace. Laughter. Abundance. Joy.</p>
-      <p class="message-line">May every good thing find its way to you.</p>
-      <p class="message-line">May you receive the same softness</p>
-      <p class="message-line">that you so freely give to everyone else.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">You deserve the whole sky, Nicky.</p>
-      <p class="message-line">Every star in it.</p>
-      <p class="message-line">Every shade of blue.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line gold">Happy Birthday, my dearest friend. 💙</p>
-      <p class="message-line" style="color:rgba(106,176,255,0.65);font-size:16px;letter-spacing:2px;">With all the love in the world —</p>
-      <p class="message-line" style="color:rgba(106,176,255,0.65);font-size:16px;letter-spacing:2px;">always and always.</p>
-
-      <div class="message-signature" id="msg-sig" style="display:none;">
+      <!-- Message lines will be shown one by one -->
+      <div id="message-lines-container"></div>
+      <div class="message-signature" id="msg-sig">
         <p>✦ &nbsp; MADE WITH LOVE, JUST FOR YOU &nbsp; ✦</p>
       </div>
     </div>
@@ -631,7 +576,6 @@ window.addEventListener('load',()=>{
     setTimeout(()=>{
       ov.remove();
       document.getElementById('main-container').style.display='block';
-      document.getElementById('btn-lights').style.display='';
     },900);
   },1800);
 });
@@ -641,6 +585,18 @@ const bgs=['#0a0e1a','#0d1b3e','#0c2461','#0a1f5c','#122b6e','#0d2055','#0a1845'
 let bgI=0;
 function nextBg(){ bgI=(bgI+1)%bgs.length; document.body.style.backgroundColor=bgs[bgI]; }
 
+/* Helper to show next button and hide current */
+let currentButtonId = 'btn-lights';
+const buttonOrder = ['btn-lights', 'btn-play', 'btn-banner', 'btn-balloons', 'btn-cake', 'btn-candle', 'btn-wish-btn', 'btn-message'];
+
+function showNextButton(currentId) {
+  const currentIdx = buttonOrder.indexOf(currentId);
+  const nextId = buttonOrder[currentIdx + 1];
+  if (nextId) {
+    document.getElementById(nextId).style.display = '';
+  }
+}
+
 /* LIGHTS */
 document.getElementById('btn-lights').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
@@ -648,9 +604,10 @@ document.getElementById('btn-lights').addEventListener('click',function(){
   const bulbs=document.querySelectorAll('.bulb');
   bulbs.forEach((b,i)=>setTimeout(()=>b.classList.add('lit'),i*200));
   setTimeout(()=>{
-    document.getElementById('btn-play').style.display='';
+    showNextButton('btn-lights');
     setInterval(nextBg,5500);
   },2000);
+  this.style.display = 'none';
 });
 
 /* PLAY */
@@ -658,14 +615,20 @@ document.getElementById('btn-play').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   const s=document.getElementById('song'); s.volume=0.6; s.play().catch(()=>{});
   spawnParticles();
-  setTimeout(()=>document.getElementById('btn-banner').style.display='',700);
+  setTimeout(()=>{
+    showNextButton('btn-play');
+  },700);
+  this.style.display = 'none';
 });
 
 /* BANNER */
 document.getElementById('btn-banner').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   document.getElementById('banner-img').classList.add('landed');
-  setTimeout(()=>document.getElementById('btn-balloons').style.display='',1300);
+  setTimeout(()=>{
+    showNextButton('btn-banner');
+  },1300);
+  this.style.display = 'none';
 });
 
 /* BALLOONS */
@@ -680,7 +643,10 @@ document.getElementById('btn-balloons').addEventListener('click',function(){
     },i*110);
   });
   document.getElementById('balloon-border').classList.add('risen');
-  setTimeout(()=>document.getElementById('btn-cake').style.display='',2200);
+  setTimeout(()=>{
+    showNextButton('btn-balloons');
+  },2200);
+  this.style.display = 'none';
 });
 
 /* CAKE */
@@ -689,43 +655,177 @@ document.getElementById('btn-cake').addEventListener('click',function(){
   const ck=document.getElementById('the-cake');
   ck.style.display='block'; ck.style.opacity='0'; ck.style.transition='opacity 1.2s ease';
   requestAnimationFrame(()=>ck.style.opacity='1');
-  setTimeout(()=>document.getElementById('btn-candle').style.display='',1100);
+  setTimeout(()=>{
+    showNextButton('btn-cake');
+  },1100);
+  this.style.display = 'none';
 });
 
 /* CANDLE */
 document.getElementById('btn-candle').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   document.querySelectorAll('.fuego').forEach(f=>f.style.display='block');
-  setTimeout(()=>document.getElementById('btn-wish-btn').style.display='',800);
+  setTimeout(()=>{
+    showNextButton('btn-candle');
+  },800);
+  this.style.display = 'none';
 });
 
 /* WISH */
 document.getElementById('btn-wish-btn').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   document.body.style.backgroundColor='#0c2461';
-  setTimeout(()=>document.getElementById('btn-message').style.display='',600);
+  setTimeout(()=>{
+    showNextButton('btn-wish-btn');
+  },600);
+  this.style.display = 'none';
 });
 
-/* MESSAGE */
+/* MESSAGE - LINE BY LINE WITH DISAPPEARING EFFECT */
 document.getElementById('btn-message').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
+  this.style.display = 'none';
+  
   const sec=document.getElementById('message-section');
   sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),100);
-  const lines=document.querySelectorAll('.message-line');
-  let delay=200;
-  lines.forEach((line,i)=>{
-    if(line.classList.contains('spacer')){
-      line.classList.add('visible'); return;
+  
+  // Define all message lines
+  const messageLinesArray = [
+    "Today, the universe decided to celebrate",
+    "the day you came into this world —",
+    "and honestly, how could it not?",
+    "Happy Birthday, Nicky. 💙",
+    "",
+    "I've been trying to find the right words",
+    "to describe what you mean to me,",
+    "and I keep running out of language.",
+    "Because some people are simply beyond words.",
+    "You are one of those people.",
+    "",
+    "You have this rare and beautiful gift —",
+    "you make everyone around you feel seen,",
+    "feel heard, feel safe.",
+    "In a world that can be loud and unkind,",
+    "you are a quiet and steady kind of warmth.",
+    "The kind that stays.",
+    "",
+    "Thank you for every conversation,",
+    "every word of encouragement you offered",
+    "when I needed it most —",
+    "even when you had your own storms to weather.",
+    "That is who you are, Nicky.",
+    "Someone who shows up. Every single time.",
+    "",
+    "Your kindness isn't performative.",
+    "It is genuine, deep, and effortless.",
+    "You care in ways most people have forgotten how to.",
+    "And that is not a small thing.",
+    "That is everything.",
+    "",
+    "The distance between us changes nothing.",
+    "You are one of the most real friendships I have.",
+    "Online or not, near or far,",
+    "you have carved a place in my life",
+    "that no one else could ever fill.",
+    "",
+    "On this birthday, I want you to feel",
+    "every bit of the love you pour into others",
+    "poured right back into you.",
+    "I want you to rest in knowing",
+    "that you are deeply, genuinely treasured —",
+    "not for what you do,",
+    "but simply for who you are.",
+    "",
+    "May this year bring you everything",
+    "your beautiful heart deserves.",
+    "Peace. Laughter. Abundance. Joy.",
+    "May every good thing find its way to you.",
+    "May you receive the same softness",
+    "that you so freely give to everyone else.",
+    "",
+    "You deserve the whole sky, Nicky.",
+    "Every star in it.",
+    "Every shade of blue.",
+    "",
+    "Happy Birthday, my dearest friend. 💙",
+    "With all the love in the world —",
+    "always and always."
+  ];
+  
+  const container = document.getElementById('message-lines-container');
+  container.innerHTML = '';
+  
+  // Create span elements for each message line
+  const lineElements = [];
+  messageLinesArray.forEach((text, idx) => {
+    const p = document.createElement('p');
+    p.className = 'message-line';
+    if (text === "") {
+      p.className = 'message-line spacer';
+      p.innerHTML = '&nbsp;';
+    } else if (text.includes("Happy Birthday, Nicky") && !text.includes("dearest")) {
+      p.className = 'message-line strong';
+      p.textContent = text;
+    } else if (text.includes("That is everything")) {
+      p.className = 'message-line strong';
+      p.textContent = text;
+    } else if (text.includes("Happy Birthday, my dearest friend")) {
+      p.className = 'message-line gold';
+      p.textContent = text;
+    } else if (text.includes("With all the love")) {
+      p.style.cssText = 'color:rgba(106,176,255,0.65);font-size:16px;letter-spacing:2px;';
+      p.textContent = text;
+    } else {
+      p.textContent = text;
     }
-    setTimeout(()=>{
-      line.classList.add('visible');
-      if(i===lines.length-1){
-        setTimeout(()=>document.getElementById('msg-sig').style.display='block',800);
-      }
-    },delay);
-    delay+=460;
+    container.appendChild(p);
+    lineElements.push(p);
   });
+  
+  let currentIndex = 0;
+  const displayDuration = 2200; // Time each line stays visible
+  const fadeDuration = 500; // Time for fade transitions
+  
+  function showNextLine() {
+    if (currentIndex >= lineElements.length) {
+      // All lines done, show signature
+      document.getElementById('msg-sig').style.display = 'block';
+      return;
+    }
+    
+    const currentLine = lineElements[currentIndex];
+    
+    // If it's a spacer, just mark as visible and move on quickly
+    if (currentLine.classList.contains('spacer')) {
+      currentLine.classList.add('visible');
+      currentIndex++;
+      setTimeout(showNextLine, 200);
+      return;
+    }
+    
+    // Show current line
+    currentLine.classList.add('visible');
+    
+    // Set timeout to hide this line and show next
+    setTimeout(() => {
+      // Hide current line with fade out
+      currentLine.classList.remove('visible');
+      currentLine.classList.add('hiding');
+      
+      // After fade out, remove it from display
+      setTimeout(() => {
+        currentLine.style.display = 'none';
+        currentLine.classList.remove('hiding');
+        currentIndex++;
+        // Show next line
+        showNextLine();
+      }, fadeDuration);
+    }, displayDuration);
+  }
+  
+  // Start showing lines
+  setTimeout(showNextLine, 300);
 });
 </script>
 </body>
