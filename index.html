@@ -4,729 +4,291 @@
   <title>Happy Birthday Nicky 💙</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;600&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="stylesheet.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="stylesheet.css">
+  <link rel="stylesheet" type="text/css" href="loading.css">
   <link rel="stylesheet/less" href="cake.less">
   <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.1.0/less.min.js"></script>
   <style>
     :root {
-      --blue-1: #0a0e1a;
-      --blue-2: #0d1b3e;
-      --blue-3: #0c2461;
-      --blue-4: #1a3a6b;
-      --blue-5: #1e4d8c;
-      --blue-light: #4a90d9;
-      --blue-glow: #6ab0ff;
-      --gold: #c9a84c;
-      --white-soft: #e8edf8;
+      --deep-blue: #0a1628;
+      --royal-blue: #1a3a6b;
+      --soft-blue: #2a5298;
+      --glow-blue: #4fc3f7;
+      --gold: #f5c842;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
 
     body {
-      background: var(--blue-1);
-      font-family: 'Cormorant Garamond', serif;
+      background-color: #000;
       overflow-x: hidden;
       transition: background-color 6s ease;
-      min-height: 100vh;
     }
 
-    /* LOADING */
-    #loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: var(--blue-1);
-      z-index: 99999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 20px;
-      transition: opacity 0.8s ease;
-    }
-    #loading-overlay.hidden { opacity: 0; pointer-events: none; }
-    .loader-ring {
-      width: 60px; height: 60px;
-      border: 3px solid rgba(100,170,255,0.15);
-      border-top-color: #6ab0ff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    .loader-text {
-      color: #6ab0ff;
-      font-family: 'Cinzel', serif;
-      letter-spacing: 4px;
-      font-size: 12px;
-      opacity: 0.7;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* STARS */
+    /* Starfield */
     #stars-canvas {
       position: fixed;
-      inset: 0;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 0;
       pointer-events: none;
-    }
-
-    audio { display: none; }
-
-    /* BALLOONS */
-    .balloons {
-      position: fixed;
-      bottom: -220px;
       opacity: 0;
-      z-index: 99;
-      width: 90px;
-      height: 170px;
-      background-repeat: no-repeat;
-      background-size: contain;
+      transition: opacity 3s ease;
     }
-    .balloons h2 {
-      text-transform: uppercase;
-      font-family: 'Cinzel', serif;
-      font-size: 38px;
-      text-shadow: 0 0 20px currentColor;
+
+    .loading { z-index: 99999; }
+
+    .container {
       display: none;
-      text-align: center;
-      line-height: 170px;
-    }
-    #b1 { background-image: url('b1.png'); left: 2%; }
-    #b2 { background-image: url('b2.png'); left: 16%; }
-    #b3 { background-image: url('b3.png'); left: 30%; }
-    #b4 { background-image: url('b4.png'); left: 44%; }
-    #b5 { background-image: url('b5.png'); left: 58%; }
-    #b6 { background-image: url('b6.png'); left: 72%; }
-    #b7 { background-image: url('b7.png'); left: 86%; }
-
-    .balloon-border {
-      position: fixed;
-      top: 100%;
-      width: 100%;
-      opacity: 0.4;
-      z-index: 9999;
-      transition: top 2s cubic-bezier(0.22,1,0.36,1);
-    }
-    .balloon-border.risen { top: 0; }
-
-    /* MAIN */
-    #main-container {
       position: relative;
       z-index: 10;
-      display: none;
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 20px 180px;
+      padding-bottom: 120px;
     }
 
-    /* BULBS */
-    .bulb-row {
-      display: flex;
-      justify-content: space-around;
-      padding: 24px 0 0;
-      position: relative;
-    }
-    .bulb-row::before {
-      content: '';
-      position: absolute;
-      top: 42px; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(100,170,255,0.25), transparent);
-    }
-    .bulb {
-      width: 42px; height: 42px;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      filter: brightness(0.25);
-      transition: filter 0.6s ease;
-    }
-    .bulb.lit { filter: brightness(1); }
-    .bulb-yellow.lit { filter: brightness(1) drop-shadow(0 0 10px #ffe066); }
-    .bulb-red.lit    { filter: brightness(1) drop-shadow(0 0 10px #ff6666); }
-    .bulb-blue.lit   { filter: brightness(1) drop-shadow(0 0 12px #66aaff); }
-    .bulb-green.lit  { filter: brightness(1) drop-shadow(0 0 10px #66ffaa); }
-    .bulb-pink.lit   { filter: brightness(1) drop-shadow(0 0 10px #ff99cc); }
-    .bulb-orange.lit { filter: brightness(1) drop-shadow(0 0 10px #ffaa44); }
+    /* Bulbs */
+    .bulb { width:50px; height:50px; margin:auto; background-repeat:no-repeat; background-position:center 0; background-size:50px 50px; }
+    .bulb-holder { height:70px; }
 
-    /* BANNER */
-    .banner-wrap {
-      text-align: center;
-      margin: 30px 0 10px;
-      overflow: hidden;
-    }
-    .bannar {
-      max-width: 85%;
-      transform: translateY(-600px);
-      transition: transform 1.4s cubic-bezier(0.34,1.56,0.64,1);
-      filter: drop-shadow(0 8px 24px rgba(100,170,255,0.3));
-    }
-    .bannar.landed { transform: translateY(0); }
-
-    /* DIVIDER */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin: 20px auto;
-      max-width: 360px;
-    }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
-    }
-    .divider-gem { color: #c9a84c; font-size: 15px; }
-
-    /* CAKE */
-    .cake-section {
-      display: flex;
-      justify-content: center;
-      padding: 40px 0 20px;
-    }
-    .cake {
-      position: relative;
-      display: none;
-      width: 300px;
-      height: 300px;
-    }
-    .cake:after {
-      background: rgba(255,255,255,0.9);
-      border-radius: 300px;
-      content: "";
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 300px; height: 6px;
-    }
-    .velas {
-      background: rgba(255,255,255,1);
-      border-radius: 100%;
-      position: absolute;
-      top: 50%; left: 50%;
-      margin-left: -7px;
-      margin-top: -25px;
-      width: 14px; height: 50px;
-    }
-    .velas:after, .velas:before {
-      background: rgba(100,170,255,0.5);
-      content: "";
-      position: absolute;
-      width: 100%; height: 6px;
-    }
-    .velas:after  { top: 25%; left: 0; }
-    .velas:before { top: 45%; left: 0; }
-    .fuego {
-      display: none;
-      border-radius: 100%;
-      box-shadow: 0 0 40px 10px rgba(248,233,209,0.2);
-      position: absolute;
-      top: -12px; left: 50%;
-      margin-left: -10px;
-      width: 20px; height: 38px;
-    }
-    .fuego:nth-child(1) { animation: fuego 2s infinite; }
-    .fuego:nth-child(2) { animation: fuego 1.5s infinite; }
-    .fuego:nth-child(3) { animation: fuego 1s infinite; }
-    .fuego:nth-child(4) { animation: fuego 0.5s infinite; }
-    .fuego:nth-child(5) { animation: fuego 0.2s infinite; }
-    @keyframes fuego {
-      0%   { background: rgba(254,248,97,0.6); transform: translateY(0) scale(1); }
-      50%  { background: rgba(255,100,0,0.15); transform: translateY(-60px) scale(0); }
-      100% { background: rgba(254,248,97,0.6); transform: translateY(0) scale(1); }
-    }
-    .cobertura {
-      background: rgba(200,215,255,1);
-      border-radius: 150px;
-      position: absolute;
-      top: 60%; left: 50%;
-      margin-left: -84px;
-      margin-top: -15px;
-      width: 168px; height: 38px;
-      z-index: 10;
-      box-shadow: 0 4px 15px rgba(100,150,255,0.25);
-    }
-    .cobertura:after, .cobertura:before {
-      background: rgba(200,215,255,1);
-      border-radius: 300px;
-      content: "";
-      position: absolute;
-      width: 15px; height: 30px;
-    }
-    .cobertura:after  { top: 20px; right: 43px; }
-    .cobertura:before { top: 30px; right: 27px; }
-    .bizcocho {
-      background: linear-gradient(160deg, #0c2461, #1a3a6b);
-      position: absolute;
-      bottom: 0; left: 50%;
-      margin-left: -75px;
-      width: 150px; height: 100px;
-      border-radius: 0 0 8px 8px;
-    }
-    .bizcocho:after, .bizcocho:before {
-      background: rgba(200,220,255,0.25);
-      content: "";
-      position: absolute;
-      width: 100%; height: 14px;
-    }
-    .bizcocho:after  { top: 30%; left: 0; }
-    .bizcocho:before { top: 60%; left: 0; }
-
-    /* MESSAGE */
-    .message-section {
-      display: none;
-      padding: 60px 10px 40px;
-    }
-    .message-header {
-      text-align: center;
-      margin-bottom: 44px;
-    }
-    .message-header h1 {
-      font-family: 'Cinzel', serif;
-      color: #c9a84c;
-      font-size: clamp(26px, 5vw, 46px);
-      letter-spacing: 6px;
-      text-shadow: 0 0 30px rgba(201,168,76,0.45);
-      margin-bottom: 10px;
-    }
-    .message-header .subtitle {
-      color: #6ab0ff;
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 20px;
-      opacity: 0.75;
-    }
-    .message-card {
-      background: linear-gradient(135deg, rgba(13,27,62,0.85), rgba(12,36,97,0.6));
-      border: 1px solid rgba(100,170,255,0.18);
-      border-radius: 16px;
-      padding: 50px 46px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 20px 60px rgba(0,0,20,0.55), inset 0 1px 0 rgba(255,255,255,0.04);
-      position: relative;
-      overflow: hidden;
-    }
-    .message-card::before {
-      content: '';
-      position: absolute;
-      top: -80px; right: -80px;
-      width: 250px; height: 250px;
-      background: radial-gradient(circle, rgba(100,170,255,0.07) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .message-line {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(18px, 2.4vw, 24px);
-      color: #e8edf8;
-      line-height: 1.95;
-      display: none;
-      opacity: 0;
-      text-align: center;
-      font-style: italic;
-      font-weight: 300;
-    }
-    .message-line.strong {
-      font-style: normal;
-      font-weight: 600;
-      color: #6ab0ff;
-      font-size: clamp(20px, 3vw, 28px);
-      letter-spacing: 0.5px;
-    }
-    .message-line.gold {
-      color: #c9a84c;
-      font-style: normal;
-      font-size: clamp(22px, 3.5vw, 32px);
-      font-family: 'Cinzel', serif;
-      letter-spacing: 2px;
-    }
-    .message-line.visible {
-      display: block;
-      animation: fadeUp 0.9s ease forwards;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .message-line.spacer { display: block; height: 18px; animation: none; opacity: 1; }
-
-    .message-signature {
-      text-align: center;
-      margin-top: 36px;
-      padding-top: 28px;
-      border-top: 1px solid rgba(100,170,255,0.14);
-    }
-    .message-signature p {
-      color: #6ab0ff;
-      font-family: 'Cinzel', serif;
-      font-size: 12px;
-      letter-spacing: 4px;
-      opacity: 0.6;
+    /* Banner */
+    .bannar { max-width:100%; transform:translate(0,-500px); }
+    .bannar-come { animation:bannar_come linear 6s; transform:translate(0,0); }
+    @keyframes bannar_come {
+      0%  { transform:translate(0,-1000px); }
+      33% { transform:rotate(10deg); }
+      66% { transform:translate(0,100px) rotate(-10deg); }
+      100%{ transform:translate(0,0); }
     }
 
-    /* PARTICLES */
-    .particle {
-      position: fixed;
-      pointer-events: none;
-      z-index: 5;
-      border-radius: 50%;
-      opacity: 0;
-      animation: floatUp linear infinite;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-      10%  { opacity: 0.6; }
-      90%  { opacity: 0.3; }
-      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-    }
+    /* Balloons */
+    .balloons { position:fixed; bottom:-200px; opacity:0.75; z-index:99; width:100px; height:183px; background-repeat:no-repeat; background-size:100px 183px; filter:drop-shadow(0 0 8px rgba(79,195,247,0.4)); }
+    .balloons h2 { text-transform:uppercase; font-family:'Playfair Display',serif; font-size:50px; text-shadow:3px 3px 10px rgba(79,195,247,0.8); display:none; }
+    #b1,#b11{background-image:url('b1.png')} #b2,#b22{background-image:url('b2.png')} #b3,#b33{background-image:url('b3.png')}
+    #b4,#b44{background-image:url('b4.png')} #b5,#b55{background-image:url('b5.png')} #b6,#b66{background-image:url('b6.png')} #b7,#b77{background-image:url('b7.png')}
+    .balloons-rotate-behaviour-one { animation:balloons_rotate_one linear 10s infinite; transform:rotate(30deg); }
+    @keyframes balloons_rotate_one { 0%{transform:rotate(30deg)} 50%{transform:rotate(-30deg)} 100%{transform:rotate(30deg)} }
+    .balloons-rotate-behaviour-two { animation:balloons_rotate_two linear 10s infinite; transform:rotate(-20deg); }
+    @keyframes balloons_rotate_two { 0%{transform:rotate(-20deg)} 50%{transform:rotate(20deg)} 100%{transform:rotate(-20deg)} }
+    .balloon-border { position:fixed; top:100%; opacity:0.5; z-index:9999; }
 
-    /* CONTROL PANEL */
-    .control-panel {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(4,8,24,0.97), rgba(4,8,24,0.88));
-      border-top: 1px solid rgba(100,170,255,0.12);
-      padding: 14px 14px;
-      z-index: 1000;
-      backdrop-filter: blur(14px);
-    }
-    .buttons-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      max-width: 780px;
-      margin: 0 auto;
-    }
-    .btn-wish {
-      background: transparent;
-      border: 1px solid rgba(100,170,255,0.3);
-      color: #6ab0ff;
-      font-family: 'Cinzel', serif;
-      font-size: 10.5px;
-      letter-spacing: 1.5px;
-      padding: 9px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.28s ease;
-      white-space: nowrap;
-    }
-    .btn-wish:hover {
-      background: rgba(100,170,255,0.1);
-      border-color: #6ab0ff;
-      box-shadow: 0 0 14px rgba(100,170,255,0.18);
-    }
-    .btn-wish:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
-    .btn-wish.active {
-      border-color: #c9a84c;
-      color: #c9a84c;
-      background: rgba(201,168,76,0.08);
-    }
+    audio { display:none; }
+    .cake-cover { margin-top:50px; }
 
-    @media (max-width: 600px) {
-      .message-card { padding: 28px 18px; }
-      .btn-wish { font-size: 9.5px; padding: 8px 10px; }
-    }
+    /* Message */
+    .message { display:none; margin-top:60px; padding:0 20px 40px; }
+    .message::before { content:''; display:block; width:80px; height:2px; background:linear-gradient(90deg,transparent,var(--glow-blue),transparent); margin:0 auto 40px; box-shadow:0 0 12px var(--glow-blue); }
+    .message p { font-family:'Cormorant Garamond',serif; font-size:22px; line-height:1.9; color:#c8deff; display:none; text-align:center; font-style:italic; margin:0; padding:4px 0; letter-spacing:0.3px; }
+    .message p.emphasis { font-family:'Playfair Display',serif; font-size:28px; font-style:normal; font-weight:700; color:var(--glow-blue); text-shadow:0 0 20px rgba(79,195,247,0.6); }
+    .message p.final-wish { font-family:'Playfair Display',serif; font-size:26px; font-style:normal; font-weight:700; color:var(--gold); text-shadow:0 0 20px rgba(245,200,66,0.6); margin-top:20px; }
+
+    /* Buttons */
+    .navbar.navbar-fixed-bottom { background:rgba(5,12,30,0.93); border:none; border-top:1px solid rgba(79,195,247,0.2); backdrop-filter:blur(10px); padding:12px 0; box-shadow:0 -4px 30px rgba(0,0,0,0.5); }
+    #play,#bannar_coming,#balloons_flying,#cake_fadein,#light_candle,#wish_message,#story { display:none; }
+    .btn-primary { border:1px solid rgba(79,195,247,0.4); padding:9px 14px; text-transform:uppercase; font-family:'Playfair Display',serif; font-weight:700; font-size:11px; letter-spacing:1px; color:#fff; background:linear-gradient(135deg,rgba(26,58,107,0.8),rgba(42,82,152,0.6)); border-radius:4px; margin:3px; transition:all 0.3s ease; }
+    .btn-primary:hover,.btn-primary:focus,.btn-primary:active { background:linear-gradient(135deg,rgba(79,195,247,0.3),rgba(42,82,152,0.8)); border-color:var(--glow-blue); color:#fff; box-shadow:0 0 20px rgba(79,195,247,0.4); transform:translateY(-1px); }
+
+    /* Particles */
+    .particle { position:fixed; border-radius:50%; pointer-events:none; z-index:1; animation:float-up linear infinite; opacity:0; }
+    @keyframes float-up { 0%{transform:translateY(100vh) scale(0);opacity:0} 10%{opacity:0.6} 90%{opacity:0.3} 100%{transform:translateY(-10vh) scale(1);opacity:0} }
+
+    /* Bulb glow */
+    .bulb-glow-yellow{background-image:url('bulb_yellow.png');animation:bulb_glow linear 5s} .bulb-glow-red{background-image:url('bulb_red.png');animation:bulb_glow linear 5s} .bulb-glow-blue{background-image:url('bulb_blue.png');animation:bulb_glow linear 5s} .bulb-glow-green{background-image:url('bulb_green.png');animation:bulb_glow linear 5s} .bulb-glow-pink{background-image:url('bulb_pink.png');animation:bulb_glow linear 5s} .bulb-glow-orange{background-image:url('bulb_orange.png');animation:bulb_glow linear 5s}
+    @keyframes bulb_glow { 0%{background-image:url('bulb.png');opacity:0} 50%{opacity:1} 100%{opacity:1} }
+    .bulb-glow-yellow-after{background-image:url('bulb_yellow.png');animation:bc_y linear 2s infinite} .bulb-glow-red-after{background-image:url('bulb_red.png');animation:bc_r linear 2.4s infinite} .bulb-glow-blue-after{background-image:url('bulb_blue.png');animation:bc_b linear 1.8s infinite} .bulb-glow-green-after{background-image:url('bulb_green.png');animation:bc_g linear 2.6s infinite} .bulb-glow-pink-after{background-image:url('bulb_pink.png');animation:bc_p linear 2.2s infinite} .bulb-glow-orange-after{background-image:url('bulb_orange.png');animation:bc_o linear 2.2s infinite}
+    @keyframes bc_y{0%,100%{background-image:url('bulb.png')}50%{background-image:url('bulb_yellow.png')}} @keyframes bc_r{0%,100%{background-image:url('bulb.png')}50%{background-image:url('bulb_red.png')}} @keyframes bc_b{0%,100%{background-image:url('bulb.png')}50%{background-image:url('bulb_blue.png')}} @keyframes bc_g{0%,100%{background-image:url('bulb.png')}50%{background-image:url('bulb_green.png')}} @keyframes bc_p{0%,100%{background-image:url('bulb.png')}50%{background-image:url('bulb_pink.png')}} @keyframes bc_o{0%,100%{background-image:url('bulb.png')}50%{background-image:url('bulb_orange.png')}}
+
+    .peach { background-color:#FFDAB9; }
+    .peach-after { animation:peach_alive linear 8s infinite; }
+    @keyframes peach_alive { 0%,50%,100%{background-color:#FFDAB9} 25%{background-color:#FFE4B5} 75%{background-color:#FFEFD5} }
   </style>
 </head>
+
 <body>
+  <canvas id="stars-canvas"></canvas>
+  <div class="loading"></div>
+  <audio class="song" controls loop><source src="hbd.mp3">Your browser isn't invited for super fun audio time.</audio>
 
-<canvas id="stars-canvas"></canvas>
+  <div class="balloons text-center" id="b1"><h2 style="color:#4fc3f7;">H</h2></div>
+  <div class="balloons text-center" id="b2"><h2 style="color:#81d4fa;">B</h2></div>
+  <div class="balloons text-center" id="b3"><h2 style="color:#4fc3f7;">D</h2></div>
+  <div class="balloons text-center" id="b4"><h2 style="color:#f5c842;">N</h2></div>
+  <div class="balloons text-center" id="b5"><h2 style="color:#4fc3f7;">I</h2></div>
+  <div class="balloons text-center" id="b6"><h2 style="color:#81d4fa;">C</h2></div>
+  <div class="balloons text-center" id="b7"><h2 style="color:#4fc3f7;">K</h2></div>
 
-<div id="loading-overlay">
-  <div class="loader-ring"></div>
-  <div class="loader-text">PREPARING SOMETHING SPECIAL</div>
-</div>
+  <img src="Balloon-Border.png" width="100%" class="balloon-border">
 
-<audio id="song" loop><source src="hbd.mp3"></audio>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_yellow"></div></div>
+      <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_red"></div></div>
+      <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_blue"></div></div>
+      <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_green"></div></div>
+      <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_pink"></div></div>
+      <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_orange"></div></div>
+    </div>
 
-<!-- BALLOONS -->
-<div class="balloons" id="b1"><h2 style="color:#6ab0ff;">H</h2></div>
-<div class="balloons" id="b2"><h2 style="color:#a0cfff;">A</h2></div>
-<div class="balloons" id="b3"><h2 style="color:#4a90d9;">P</h2></div>
-<div class="balloons" id="b4"><h2 style="color:#c9a84c;">P</h2></div>
-<div class="balloons" id="b5"><h2 style="color:#6ab0ff;">Y</h2></div>
-<div class="balloons" id="b6"><h2 style="color:#a0cfff;">💙</h2></div>
-<div class="balloons" id="b7"><h2 style="color:#4a90d9;">!</h2></div>
-
-<img src="Balloon-Border.png" class="balloon-border" id="balloon-border">
-
-<div id="main-container">
-
-  <div class="bulb-row">
-    <div class="bulb bulb-yellow" style="background-image:url('bulb_yellow.png')"></div>
-    <div class="bulb bulb-blue"   style="background-image:url('bulb_blue.png')"></div>
-    <div class="bulb bulb-red"    style="background-image:url('bulb_red.png')"></div>
-    <div class="bulb bulb-blue"   style="background-image:url('bulb_blue.png')"></div>
-    <div class="bulb bulb-green"  style="background-image:url('bulb_green.png')"></div>
-    <div class="bulb bulb-blue"   style="background-image:url('bulb_blue.png')"></div>
-    <div class="bulb bulb-pink"   style="background-image:url('bulb_pink.png')"></div>
-    <div class="bulb bulb-blue"   style="background-image:url('bulb_blue.png')"></div>
-    <div class="bulb bulb-orange" style="background-image:url('bulb_orange.png')"></div>
-  </div>
-
-  <div class="banner-wrap">
-    <img src="banner.png" class="bannar" id="banner-img">
-  </div>
-
-  <div class="divider"><span class="divider-gem">✦</span></div>
-
-  <div class="cake-section">
-    <div class="cake" id="the-cake">
-      <div class="velas">
-        <div class="fuego"></div><div class="fuego"></div>
-        <div class="fuego"></div><div class="fuego"></div>
-        <div class="fuego"></div>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img src="banner.png" class="bannar">
       </div>
-      <div class="cobertura"></div>
-      <div class="bizcocho"></div>
     </div>
-  </div>
 
-  <div class="message-section" id="message-section">
-    <div class="message-header">
-      <h1>Happy Birthday</h1>
-      <p class="subtitle">For someone truly irreplaceable</p>
+    <div class="row cake-cover">
+      <div class="col-md-12 text-center">
+        <div class="cake">
+          <div class="velas">
+            <div class="fuego"></div><div class="fuego"></div><div class="fuego"></div>
+            <div class="fuego"></div><div class="fuego"></div>
+          </div>
+          <div class="cobertura"></div>
+          <div class="bizcocho"></div>
+        </div>
+      </div>
     </div>
-    <div class="divider"><span class="divider-gem">✦</span></div>
-    <div class="message-card" id="message-card">
 
-      <p class="message-line">Today, the universe decided to celebrate</p>
-      <p class="message-line">the day you came into this world —</p>
-      <p class="message-line">and honestly, how could it not?</p>
-      <p class="message-line strong">Happy Birthday, Nicky. 💙</p>
-      <p class="message-line spacer"></p>
+    <!-- The Birthday Message for Nicky -->
+    <div class="row message">
+      <div class="col-md-8 col-md-offset-2">
+        <p>hey Nicky…</p>
+        <p>I've been trying to figure out</p>
+        <p>how to put this into words</p>
+        <p>but honestly, some people</p>
+        <p>are just too special</p>
+        <p>for words to do them justice.</p>
+        <p class="emphasis">and you? you're one of those people.</p>
+        <p>I want you to know</p>
+        <p>that meeting you online</p>
+        <p>was genuinely one of the best things</p>
+        <p>that happened to me.</p>
+        <p>not everyone gets a friend like you.</p>
+        <p>the kind that actually checks up on you.</p>
+        <p>the kind that remembers the little things.</p>
+        <p>the kind that makes you feel seen</p>
+        <p>without even trying to.</p>
+        <p>you carry this warmth with you</p>
+        <p>that just… reaches people.</p>
+        <p>I don't think you even realize</p>
+        <p>how much comfort you give</p>
+        <p>just by being there.</p>
+        <p>just by being you.</p>
+        <p>you're funny in that effortless way</p>
+        <p>where I never know when it's coming</p>
+        <p>and it gets me every single time.</p>
+        <p>you're emotionally so aware —</p>
+        <p>the way you understand people</p>
+        <p>before they even finish explaining themselves.</p>
+        <p>that's rare, Nicky. genuinely rare.</p>
+        <p>and you're caring in a way</p>
+        <p>that doesn't feel like an obligation.</p>
+        <p>it feels like it comes from your heart.</p>
+        <p>because it does.</p>
+        <p class="emphasis">so today is your day.</p>
+        <p>I really, truly hope</p>
+        <p>it's as beautiful as you are.</p>
+        <p>I hope you feel loved today —</p>
+        <p>and not just by me,</p>
+        <p>but by life itself.</p>
+        <p>I hope this year opens up</p>
+        <p>every door you've been waiting on,</p>
+        <p>brings you moments that take your breath away,</p>
+        <p>and gives you all the peace and joy</p>
+        <p>you deserve more than anyone I know.</p>
+        <p>thank you for being my online bestie.</p>
+        <p>thank you for the laughs,</p>
+        <p>the random check-ins,</p>
+        <p>and the way you always make people</p>
+        <p>feel like they matter.</p>
+        <p>because to me?</p>
+        <p>you really, really do.</p>
+        <p class="final-wish">happy birthday, Nicky 💙</p>
+        <p class="final-wish">wishing you a year as warm as your heart.</p>
+      </div>
+    </div>
 
-      <p class="message-line">I've been trying to find the right words</p>
-      <p class="message-line">to describe what you mean to me,</p>
-      <p class="message-line">and I keep running out of language.</p>
-      <p class="message-line">Because some people are simply beyond words.</p>
-      <p class="message-line">You are one of those people.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">You have this rare and beautiful gift —</p>
-      <p class="message-line">you make everyone around you feel seen,</p>
-      <p class="message-line">feel heard, feel safe.</p>
-      <p class="message-line">In a world that can be loud and unkind,</p>
-      <p class="message-line">you are a quiet and steady kind of warmth.</p>
-      <p class="message-line">The kind that stays.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">Thank you for every conversation,</p>
-      <p class="message-line">every word of encouragement you offered</p>
-      <p class="message-line">when I needed it most —</p>
-      <p class="message-line">even when you had your own storms to weather.</p>
-      <p class="message-line">That is who you are, Nicky.</p>
-      <p class="message-line">Someone who shows up. Every single time.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">Your kindness isn't performative.</p>
-      <p class="message-line">It is genuine, deep, and effortless.</p>
-      <p class="message-line">You care in ways most people have forgotten how to.</p>
-      <p class="message-line">And that is not a small thing.</p>
-      <p class="message-line strong">That is everything.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">The distance between us changes nothing.</p>
-      <p class="message-line">You are one of the most real friendships I have.</p>
-      <p class="message-line">Online or not, near or far,</p>
-      <p class="message-line">you have carved a place in my life</p>
-      <p class="message-line">that no one else could ever fill.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">On this birthday, I want you to feel</p>
-      <p class="message-line">every bit of the love you pour into others</p>
-      <p class="message-line">poured right back into you.</p>
-      <p class="message-line">I want you to rest in knowing</p>
-      <p class="message-line">that you are deeply, genuinely treasured —</p>
-      <p class="message-line">not for what you do,</p>
-      <p class="message-line">but simply for who you are.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">May this year bring you everything</p>
-      <p class="message-line">your beautiful heart deserves.</p>
-      <p class="message-line">Peace. Laughter. Abundance. Joy.</p>
-      <p class="message-line">May every good thing find its way to you.</p>
-      <p class="message-line">May you receive the same softness</p>
-      <p class="message-line">that you so freely give to everyone else.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line">You deserve the whole sky, Nicky.</p>
-      <p class="message-line">Every star in it.</p>
-      <p class="message-line">Every shade of blue.</p>
-      <p class="message-line spacer"></p>
-
-      <p class="message-line gold">Happy Birthday, my dearest friend. 💙</p>
-      <p class="message-line" style="color:rgba(106,176,255,0.65);font-size:16px;letter-spacing:2px;">With all the love in the world —</p>
-      <p class="message-line" style="color:rgba(106,176,255,0.65);font-size:16px;letter-spacing:2px;">always and always.</p>
-
-      <div class="message-signature" id="msg-sig" style="display:none;">
-        <p>✦ &nbsp; MADE WITH LOVE, JUST FOR YOU &nbsp; ✦</p>
+    <div class="navbar navbar-fixed-bottom">
+      <div class="row">
+        <div class="col-md-8 text-center col-md-offset-2">
+          <button class="btn btn-primary" id="turn_on">✦ Turn On Lights</button>
+          <button class="btn btn-primary" id="play">♪ Play Music</button>
+          <button class="btn btn-primary" id="bannar_coming">✦ Decorate</button>
+          <button class="btn btn-primary" id="balloons_flying">✦ Fly With Balloons</button>
+          <button class="btn btn-primary" id="cake_fadein">🎂 Bring the Cake</button>
+          <button class="btn btn-primary" id="light_candle">🕯 Light the Candles</button>
+          <button class="btn btn-primary" id="wish_message">💙 Happy Birthday</button>
+          <button class="btn btn-primary" id="story">💌 A Message For You</button>
+        </div>
       </div>
     </div>
   </div>
 
-</div>
-
-<!-- CONTROL PANEL -->
-<div class="control-panel">
-  <div class="buttons-wrap">
-    <button class="btn-wish" id="btn-lights">✦ Turn On Lights</button>
-    <button class="btn-wish" id="btn-play"    style="display:none;">♪ Play Music</button>
-    <button class="btn-wish" id="btn-banner"  style="display:none;">🎊 Let's Decorate</button>
-    <button class="btn-wish" id="btn-balloons"style="display:none;">🎈 Fly With Balloons</button>
-    <button class="btn-wish" id="btn-cake"    style="display:none;">🎂 Show the Cake</button>
-    <button class="btn-wish" id="btn-candle"  style="display:none;">🕯 Light the Candle</button>
-    <button class="btn-wish" id="btn-wish-btn"style="display:none;">💙 Happy Birthday</button>
-    <button class="btn-wish" id="btn-message" style="display:none;">✉ A Message for You</button>
-  </div>
-</div>
-
-<script>
-/* STARS */
-(function() {
-  const c = document.getElementById('stars-canvas');
-  const ctx = c.getContext('2d');
-  let W, H, stars = [];
-  function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
-  function init() {
-    stars = [];
-    for (let i = 0; i < 200; i++) {
-      stars.push({ x: Math.random()*W, y: Math.random()*H,
-        r: Math.random()*1.4+0.2, a: Math.random(),
-        spd: Math.random()*0.007+0.002, d: Math.random()>0.5?1:-1 });
-    }
-  }
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    stars.forEach(s => {
-      s.a += s.spd*s.d;
-      if (s.a>=1||s.a<=0.05) s.d*=-1;
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(160,200,255,${s.a})`; ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  }
-  resize(); init(); draw();
-  addEventListener('resize',()=>{resize();init();});
-})();
-
-/* PARTICLES */
-function spawnParticles() {
-  const clrs = ['rgba(100,170,255,0.6)','rgba(60,130,210,0.5)','rgba(201,168,76,0.5)','rgba(180,210,255,0.4)'];
-  for (let i=0;i<24;i++) {
-    setTimeout(()=>{
-      const p=document.createElement('div'); p.className='particle';
-      const sz=Math.random()*5+2;
-      p.style.cssText=`left:${Math.random()*100}vw;bottom:-10px;width:${sz}px;height:${sz}px;background:${clrs[Math.floor(Math.random()*clrs.length)]};animation-duration:${9+Math.random()*10}s;animation-delay:${Math.random()*4}s;`;
-      document.body.appendChild(p);
-    },i*280);
-  }
-}
-
-/* LOADING */
-window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    const ov=document.getElementById('loading-overlay');
-    ov.classList.add('hidden');
-    setTimeout(()=>{
-      ov.remove();
-      document.getElementById('main-container').style.display='block';
-      document.getElementById('btn-lights').style.display='';
-    },900);
-  },1800);
-});
-
-/* BG SHIFT */
-const bgs=['#0a0e1a','#0d1b3e','#0c2461','#0a1f5c','#122b6e','#0d2055','#0a1845','#091535'];
-let bgI=0;
-function nextBg(){ bgI=(bgI+1)%bgs.length; document.body.style.backgroundColor=bgs[bgI]; }
-
-/* LIGHTS */
-document.getElementById('btn-lights').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  document.body.style.backgroundColor='#0d1b3e';
-  const bulbs=document.querySelectorAll('.bulb');
-  bulbs.forEach((b,i)=>setTimeout(()=>b.classList.add('lit'),i*200));
-  setTimeout(()=>{
-    document.getElementById('btn-play').style.display='';
-    setInterval(nextBg,5500);
-  },2000);
-});
-
-/* PLAY */
-document.getElementById('btn-play').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  const s=document.getElementById('song'); s.volume=0.6; s.play().catch(()=>{});
-  spawnParticles();
-  setTimeout(()=>document.getElementById('btn-banner').style.display='',700);
-});
-
-/* BANNER */
-document.getElementById('btn-banner').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  document.getElementById('banner-img').classList.add('landed');
-  setTimeout(()=>document.getElementById('btn-balloons').style.display='',1300);
-});
-
-/* BALLOONS */
-document.getElementById('btn-balloons').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  document.querySelectorAll('.balloons').forEach((b,i)=>{
-    b.querySelector('h2').style.display='block';
-    setTimeout(()=>{
-      b.style.transition=`bottom ${2.4+i*0.12}s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease`;
-      b.style.bottom=`${58+(i%3)*16}px`;
-      b.style.opacity='0.82';
-    },i*110);
-  });
-  document.getElementById('balloon-border').classList.add('risen');
-  setTimeout(()=>document.getElementById('btn-cake').style.display='',2200);
-});
-
-/* CAKE */
-document.getElementById('btn-cake').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  const ck=document.getElementById('the-cake');
-  ck.style.display='block'; ck.style.opacity='0'; ck.style.transition='opacity 1.2s ease';
-  requestAnimationFrame(()=>ck.style.opacity='1');
-  setTimeout(()=>document.getElementById('btn-candle').style.display='',1100);
-});
-
-/* CANDLE */
-document.getElementById('btn-candle').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  document.querySelectorAll('.fuego').forEach(f=>f.style.display='block');
-  setTimeout(()=>document.getElementById('btn-wish-btn').style.display='',800);
-});
-
-/* WISH */
-document.getElementById('btn-wish-btn').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  document.body.style.backgroundColor='#0c2461';
-  setTimeout(()=>document.getElementById('btn-message').style.display='',600);
-});
-
-/* MESSAGE */
-document.getElementById('btn-message').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  const sec=document.getElementById('message-section');
-  sec.style.display='block';
-  setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),100);
-  const lines=document.querySelectorAll('.message-line');
-  let delay=200;
-  lines.forEach((line,i)=>{
-    if(line.classList.contains('spacer')){
-      line.classList.add('visible'); return;
-    }
-    setTimeout(()=>{
-      line.classList.add('visible');
-      if(i===lines.length-1){
-        setTimeout(()=>document.getElementById('msg-sig').style.display='block',800);
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script src="effect.js"></script>
+  <script>
+    /* Starfield */
+    const canvas = document.getElementById('stars-canvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < 220; i++) {
+        stars.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*1.5+0.3, speed:Math.random()*0.008+0.003, phase:Math.random()*Math.PI*2 });
       }
-    },delay);
-    delay+=460;
-  });
-});
-</script>
+    }
+    function drawStars(t) {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(s => {
+        const a = 0.3 + 0.7*(0.5+0.5*Math.sin(t*s.speed+s.phase));
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle = `rgba(180,220,255,${a})`; ctx.fill();
+      });
+      requestAnimationFrame(drawStars);
+    }
+    resizeCanvas(); initStars();
+    window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+    requestAnimationFrame(drawStars);
+
+    /* Floating particles */
+    function spawnParticles() {
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random()*6+2;
+        const colors = ['rgba(79,195,247,','rgba(129,212,250,','rgba(245,200,66,','rgba(100,160,255,'];
+        const c = colors[Math.floor(Math.random()*colors.length)];
+        p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}vw;background:${c}0.7)`;
+        p.style.animationDuration = (Math.random()*10+8)+'s';
+        p.style.animationDelay = (Math.random()*6)+'s';
+        document.body.appendChild(p);
+      }
+    }
+
+    /* Progressive deep blue background */
+    let bgStage = 0;
+    const bgStages = ['#000000','#04091a','#07152e','#0a1c3f','#0d2450','#0a1628'];
+    function advanceBg() {
+      if (bgStage < bgStages.length-1) {
+        bgStage++;
+        document.body.style.backgroundColor = bgStages[bgStage];
+      }
+    }
+
+    /* Tie into button clicks */
+    document.getElementById('turn_on').addEventListener('click', advanceBg);
+    document.getElementById('balloons_flying').addEventListener('click', () => { advanceBg(); spawnParticles(); });
+    document.getElementById('cake_fadein').addEventListener('click', advanceBg);
+    document.getElementById('wish_message').addEventListener('click', () => {
+      advanceBg();
+      canvas.style.opacity = '1';
+    });
+    document.getElementById('story').addEventListener('click', () => {
+      advanceBg();
+      canvas.style.opacity = '1';
+      spawnParticles();
+    });
+  </script>
 </body>
 </html>
