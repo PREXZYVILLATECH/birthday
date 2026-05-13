@@ -68,17 +68,18 @@
 
     audio { display: none; }
 
-    /* BALLOONS - Now 8 balloons for HBD NICKY */
+    /* BALLOONS - will float high up, away from banner */
     .balloons {
       position: fixed;
-      bottom: -220px;
+      bottom: -250px;
       opacity: 0;
-      z-index: 99;
+      z-index: 98;
       width: 70px;
       height: 140px;
       background-repeat: no-repeat;
       background-size: contain;
       pointer-events: none;
+      transition: bottom 3s cubic-bezier(0.22, 0.88, 0.36, 1), opacity 0.8s ease;
     }
     .balloons h2 {
       text-transform: uppercase;
@@ -90,15 +91,15 @@
       line-height: 140px;
       margin: 0;
     }
-    /* Position balloons spread across screen */
-    #b1 { background-image: url('b1.png'); left: 5%; }
-    #b2 { background-image: url('b2.png'); left: 16%; }
+    /* Spread balloons wider across screen */
+    #b1 { background-image: url('b1.png'); left: 3%; }
+    #b2 { background-image: url('b2.png'); left: 15%; }
     #b3 { background-image: url('b3.png'); left: 27%; }
-    #b4 { background-image: url('b4.png'); left: 38%; }
-    #b5 { background-image: url('b5.png'); left: 49%; }
-    #b6 { background-image: url('b6.png'); left: 60%; }
-    #b7 { background-image: url('b7.png'); left: 71%; }
-    #b8 { background-image: url('b8.png'); left: 82%; }
+    #b4 { background-image: url('b4.png'); left: 39%; }
+    #b5 { background-image: url('b5.png'); left: 51%; }
+    #b6 { background-image: url('b6.png'); left: 63%; }
+    #b7 { background-image: url('b7.png'); left: 75%; }
+    #b8 { background-image: url('b8.png'); left: 87%; }
 
     .balloon-border {
       position: fixed;
@@ -156,6 +157,8 @@
       text-align: center;
       margin: 30px 0 10px;
       overflow: hidden;
+      position: relative;
+      z-index: 15;
     }
     .bannar {
       max-width: 85%;
@@ -450,8 +453,8 @@
         margin: 0 auto;
         left: 0;
       }
-      .balloons h2 { font-size: 24px; line-height: 140px; }
-      .balloons { width: 55px; height: 110px; }
+      .balloons h2 { font-size: 22px; line-height: 120px; }
+      .balloons { width: 50px; height: 120px; }
     }
   </style>
 </head>
@@ -519,7 +522,7 @@
     <div class="message-card" id="message-card">
       <div id="message-lines-container"></div>
       <div class="message-signature" id="msg-sig">
-        <p>✦ FOREVER & ALWAYS, YOUR BESTIE ✦</p>
+        <p>✦ FROM PREXZY, WITH ALL MY HEART ✦</p>
       </div>
     </div>
   </div>
@@ -645,17 +648,16 @@ document.getElementById('btn-banner').addEventListener('click',function(){
   this.style.display = 'none';
 });
 
-/* BALLOONS - fly up one by one */
+/* BALLOONS - fly high up, away from banner */
 document.getElementById('btn-balloons').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   const balloons = document.querySelectorAll('.balloons');
   balloons.forEach((balloon, index) => {
     setTimeout(() => {
       balloon.querySelector('h2').style.display = 'block';
-      balloon.style.transition = `bottom 2.5s cubic-bezier(0.22,0.88,0.36,1), opacity 0.8s ease`;
-      balloon.style.bottom = `70%`;
+      balloon.style.bottom = '85%';
       balloon.style.opacity = '0.9';
-    }, index * 300);
+    }, index * 250);
   });
   document.getElementById('balloon-border').classList.add('risen');
   setTimeout(()=>{
@@ -696,7 +698,7 @@ document.getElementById('btn-wish-btn').addEventListener('click',function(){
   this.style.display = 'none';
 });
 
-/* HEARTFELT BIRTHDAY MESSAGE */
+/* ROMANTIC HEARTFELT MESSAGE FROM PREXZY */
 document.getElementById('btn-message').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   this.style.display = 'none';
@@ -705,84 +707,79 @@ document.getElementById('btn-message').addEventListener('click',function(){
   sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),100);
   
-  // Personal, warm, heartfelt message for an online bestie
+  // A natural, romantic, heartfelt message from Prexzy to Nicky
   const messageLinesArray = [
-    "Okay, so... where do I even start?",
+    "Nicky, my dearest bestie,",
     "",
-    "Happy Birthday, Nicky. 💙",
+    "Happy Birthday. 💙",
     "",
-    "I've been thinking about what to write for days,",
-    "and honestly? Words still don't feel like enough.",
-    "But I'm gonna try anyway, because you deserve to know",
-    "just how much you mean to me.",
+    "I built this whole website just for you.",
+    "Every star, every light, every word.",
+    "Because you deserve something special.",
+    "You deserve to feel how much you mean to me.",
     "",
-    "We met online, but somehow,",
-    "you've become one of the most real people in my life.",
-    "Isn't that crazy? How distance doesn't matter",
-    "when the connection is this real.",
+    "Do you ever think about how we met?",
+    "Two strangers on a screen.",
+    "And now look at us.",
+    "You're one of the most important people in my life.",
+    "Funny how life works, isn't it?",
     "",
-    "You have this thing about you...",
-    "this way of making people feel comfortable,",
-    "like they can just... be themselves around you.",
-    "No pretending. No walls. Just warmth.",
-    "And that's rare, Nicky. Really rare.",
+    "There's something about you, Nicky.",
+    "Something that makes my heart feel full.",
+    "Your laugh, the way you talk about things you love,",
+    "the way you see beauty where others don't even look.",
+    "You're not just sweet. You're magic.",
     "",
-    "You're the kind of person who actually checks up on people.",
-    "Not because you have to, but because you genuinely care.",
-    "You remember the little things.",
-    "You show up. You listen.",
-    "And you make people feel seen in a world",
-    "that often forgets to look.",
+    "I've noticed the little things about you.",
+    "The way your eyes probably light up when you're excited.",
+    "The way you say certain words.",
+    "The way you care so deeply without even realizing it.",
+    "And yeah, I pay attention.",
+    "Because you're worth paying attention to.",
     "",
-    "I can't even count how many times",
-    "you've made me laugh when I needed it most.",
-    "Or how many late night conversations we've had",
-    "that somehow made everything feel lighter.",
-    "You just get it. You get me.",
-    "And I don't take that for granted.",
+    "You have no idea how many times",
+    "just hearing from you made my whole day better.",
+    "How a simple message from you",
+    "could turn everything around.",
+    "That's what you do to me.",
+    "And I wouldn't trade that for anything.",
     "",
-    "You're so much more than just 'an online friend'.",
-    "You're my person. My bestie.",
-    "The one I know I can always count on,",
-    "no matter how many miles are between us.",
+    "I wish I could be there with you today.",
+    "I wish I could see your smile in person.",
+    "Maybe one day. But until then,",
+    "know that I'm celebrating you from here.",
+    "Thinking of you. Smiling because of you.",
     "",
-    "I hope today, you feel all the love",
-    "that you give so freely to everyone else,",
-    "coming right back to you ten times over.",
-    "I hope you smile until your cheeks hurt.",
-    "I hope you eat way too much cake.",
-    "I hope you know that somewhere out there,",
-    "someone is celebrating you so hard right now.",
+    "You're beautiful, Nicky.",
+    "Not just on the outside, but inside too.",
+    "The kind of beautiful that stays with you.",
+    "The kind that makes someone like me",
+    "feel lucky just to know you exist.",
     "",
-    "Thank you for being you.",
-    "For being kind when the world is messy.",
-    "For being funny without even trying.",
-    "For being the type of person",
-    "that makes life better just by being in it.",
+    "I don't say this enough, but...",
+    "I'm really glad you're in my life.",
+    "Like, really really glad.",
+    "You make things better just by being you.",
     "",
-    "You deserve every good thing, Nicky.",
-    "Every laugh. Every hug. Every happy moment.",
-    "And I'm so, so grateful that you exist.",
+    "So today, I hope you feel loved.",
+    "I hope you feel seen.",
+    "I hope you feel every good thing",
+    "that you deserve to feel.",
     "",
-    "So here's to you, my favourite person.",
-    "Here's to more late night talks,",
-    "more inside jokes, more memories,",
-    "and more of... just us.",
+    "Happy Birthday, Nicky.",
+    "My bestie. My person.",
+    "The girl who somehow stole my heart",
+    "without even trying.",
     "",
-    "I love having you in my life.",
-    "And I can't wait to celebrate so many more birthdays with you.",
+    "From me to you,",
+    "with all the love I have,",
     "",
-    "Happy Birthday, Nicky. 💙",
-    "You're truly one of a kind.",
-    "",
-    "With all my love,",
-    "Your bestie, always."
+    "Prexzy 💙"
   ];
   
   const container = document.getElementById('message-lines-container');
   container.innerHTML = '';
   
-  // Create elements for each message line
   const lineElements = [];
   messageLinesArray.forEach((text, idx) => {
     const p = document.createElement('p');
@@ -790,17 +787,17 @@ document.getElementById('btn-message').addEventListener('click',function(){
     if (text === "") {
       p.className = 'message-line spacer';
       p.innerHTML = '&nbsp;';
-    } else if (text.includes("Happy Birthday, Nicky. 💙") && text.length < 30) {
+    } else if (text === "Prexzy 💙") {
+      p.style.cssText = 'color:rgba(201,168,76,0.9);font-size:20px;font-family:Cinzel;letter-spacing:2px;margin-top:20px;';
+      p.textContent = text;
+    } else if (text.includes("You're beautiful")) {
       p.className = 'message-line gold';
       p.textContent = text;
-    } else if (text.includes("You're truly one of a kind")) {
+    } else if (text.includes("stole my heart")) {
       p.className = 'message-line strong';
       p.textContent = text;
-    } else if (text.includes("With all my love")) {
-      p.style.cssText = 'color:rgba(201,168,76,0.9);font-size:18px;font-family:Cinzel;letter-spacing:2px;';
-      p.textContent = text;
-    } else if (text.includes("Your bestie, always")) {
-      p.style.cssText = 'color:rgba(106,176,255,0.8);font-size:16px;letter-spacing:2px;font-family:Cinzel;';
+    } else if (text.includes("From me to you")) {
+      p.style.cssText = 'color:rgba(106,176,255,0.8);font-size:16px;letter-spacing:2px;margin-top:15px;';
       p.textContent = text;
     } else {
       p.textContent = text;
@@ -810,7 +807,7 @@ document.getElementById('btn-message').addEventListener('click',function(){
   });
   
   let currentIndex = 0;
-  const displayDuration = 2400;
+  const displayDuration = 2500;
   const fadeDuration = 500;
   
   function showNextLine() {
