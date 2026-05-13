@@ -68,6 +68,18 @@
 
     audio { display: none; }
 
+    /* CONFETTI CANVAS */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+      display: none;
+    }
+
     /* BALLOONS inside message box */
     .balloons-container {
       display: flex;
@@ -194,7 +206,7 @@
     }
     .divider-gem { color: #c9a84c; font-size: 15px; }
 
-    /* CAKE - CENTERED */
+    /* CAKE */
     .cake-section {
       display: flex;
       justify-content: center;
@@ -452,7 +464,6 @@
       background: rgba(201,168,76,0.08);
     }
 
-    /* Mobile responsive */
     @media (max-width: 600px) {
       .message-card { padding: 28px 18px; }
       .btn-wish { font-size: 9.5px; padding: 8px 10px; }
@@ -472,6 +483,7 @@
 <body>
 
 <canvas id="stars-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
 
 <div id="loading-overlay">
   <div class="loader-ring"></div>
@@ -521,7 +533,6 @@
     <div class="message-card" id="message-card">
       <div id="message-lines-container"></div>
       
-      <!-- Balloons container - 2 lines: HBD and NICKY -->
       <div class="balloons-container" id="balloons-container">
         <div class="balloon-row" id="row1">
           <div class="mini-balloon h" data-letter="H"><h2 style="color:#6ab0ff;">H</h2></div>
@@ -538,14 +549,13 @@
       </div>
       
       <div class="message-signature" id="msg-sig">
-        <p>✦ FROM PREXZY, WITH ALL MY HEART ✦</p>
+        <p>✦ FOREVER YOURS, PREXZY ✦</p>
       </div>
     </div>
   </div>
 
 </div>
 
-<!-- CONTROL PANEL -->
 <div class="control-panel">
   <div class="buttons-wrap">
     <button class="btn-wish" id="btn-lights">✦ Turn On Lights</button>
@@ -587,6 +597,70 @@
   addEventListener('resize',()=>{resize();init();});
 })();
 
+/* CONFETTI */
+function startConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  let particles = [];
+  const colors = ['#6ab0ff', '#c9a84c', '#4a90d9', '#ff99cc', '#66ffaa', '#ffaa44', '#ff6666'];
+  
+  for (let i = 0; i < 150; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      size: Math.random() * 6 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speedY: Math.random() * 8 + 5,
+      speedX: (Math.random() - 0.5) * 4,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 10
+    });
+  }
+  
+  let animationId;
+  let startTime = Date.now();
+  
+  function drawConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    let allFinished = true;
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      if (p.y < canvas.height + 50) {
+        allFinished = false;
+        p.y += p.speedY;
+        p.x += p.speedX;
+        p.rotation += p.rotationSpeed;
+        
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        ctx.restore();
+      }
+    }
+    
+    if (allFinished || Date.now() - startTime > 4000) {
+      cancelAnimationFrame(animationId);
+      canvas.style.display = 'none';
+    } else {
+      animationId = requestAnimationFrame(drawConfetti);
+    }
+  }
+  
+  drawConfetti();
+  
+  setTimeout(() => {
+    if (animationId) cancelAnimationFrame(animationId);
+    canvas.style.display = 'none';
+  }, 4000);
+}
+
 /* PARTICLES */
 function spawnParticles() {
   const clrs = ['rgba(100,170,255,0.6)','rgba(60,130,210,0.5)','rgba(201,168,76,0.5)','rgba(180,210,255,0.4)'];
@@ -617,7 +691,6 @@ const bgs=['#0a0e1a','#0d1b3e','#0c2461','#0a1f5c','#122b6e','#0d2055','#0a1845'
 let bgI=0;
 function nextBg(){ bgI=(bgI+1)%bgs.length; document.body.style.backgroundColor=bgs[bgI]; }
 
-/* Helper to show next button and hide current */
 const buttonOrder = ['btn-lights', 'btn-play', 'btn-banner', 'btn-cake', 'btn-candle', 'btn-wish-btn', 'btn-message'];
 
 function showNextButton(currentId) {
@@ -694,7 +767,7 @@ document.getElementById('btn-wish-btn').addEventListener('click',function(){
   this.style.display = 'none';
 });
 
-/* ROMANTIC MESSAGE WITH BALLOON SEQUENCE - EACH BALLOON FLOATS IN ONE BY ONE */
+/* ROMANTIC MESSAGE WITH I LOVE YOU AND CONFETTI FINALE */
 document.getElementById('btn-message').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   this.style.display = 'none';
@@ -703,7 +776,7 @@ document.getElementById('btn-message').addEventListener('click',function(){
   sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),100);
   
-  // Heartfelt message
+  // New romantic message with "I love you"
   const messageLinesArray = [
     "Nicky, my dearest bestie,",
     "",
@@ -711,65 +784,69 @@ document.getElementById('btn-message').addEventListener('click',function(){
     "",
     "I built this whole website just for you.",
     "Every star, every light, every word.",
-    "Because you deserve something special.",
-    "You deserve to feel how much you mean to me.",
+    "Because you deserve something beautiful.",
+    "You deserve to know how much you mean to me.",
     "",
-    "Do you ever think about how we met?",
+    "Do you remember how we met?",
     "Two strangers on a screen.",
     "And now look at us.",
     "You're one of the most important people in my life.",
-    "Funny how life works, isn't it?",
+    "And honestly? I love you.",
+    "I've wanted to say that for a while now.",
     "",
     "There's something about you, Nicky.",
     "Something that makes my heart feel full.",
-    "Your laugh, the way you talk about things you love,",
+    "Your laugh, the way your eyes light up,",
     "the way you see beauty where others don't even look.",
     "You're not just sweet. You're magic.",
+    "And I love that about you.",
     "",
-    "I've noticed the little things about you.",
-    "The way your eyes light up when you're excited.",
-    "The way you say certain words.",
-    "The way you care so deeply without even realizing it.",
-    "And yeah, I pay attention.",
-    "Because you're worth paying attention to.",
+    "I've noticed everything about you.",
+    "The way you get excited about little things.",
+    "The way you care without expecting anything back.",
+    "The way you make me feel like I matter.",
+    "And I love you for all of it.",
     "",
     "You have no idea how many times",
     "just hearing from you made my whole day better.",
-    "How a simple message from you",
-    "could turn everything around.",
+    "A message from you can turn everything around.",
     "That's what you do to me.",
-    "And I wouldn't trade that for anything.",
+    "And I love you for that too.",
     "",
     "I wish I could be there with you today.",
     "I wish I could see your smile in person.",
-    "Maybe one day. But until then,",
-    "know that I'm celebrating you from here.",
-    "Thinking of you. Smiling because of you.",
+    "I wish I could hold your hand and tell you",
+    "everything I'm writing here right now.",
+    "But until that day comes,",
+    "know that my heart is with you.",
     "",
     "You're beautiful, Nicky.",
-    "Not just on the outside, but inside too.",
-    "The kind of beautiful that stays with you.",
-    "The kind that makes someone like me",
-    "feel lucky just to know you exist.",
+    "Inside and out.",
+    "The kind of beautiful that stays with you forever.",
+    "The kind that makes me feel lucky",
+    "just to know you exist.",
+    "And God, I love you.",
     "",
-    "I don't say this enough, but...",
-    "I'm really glad you're in my life.",
-    "Like, really really glad.",
-    "You make things better just by being you.",
+    "I don't say it enough, so I'll say it again.",
+    "I love you, Nicky.",
+    "I love the person you are.",
+    "I love the way you make me feel.",
+    "I just love you.",
     "",
-    "So today, I hope you feel loved.",
-    "I hope you feel seen.",
-    "I hope you feel every good thing",
-    "that you deserve to feel.",
+    "So today, on your birthday,",
+    "I hope you feel all the love",
+    "that I have for you.",
+    "All of it. Every single bit.",
     "",
-    "Happy Birthday, Nicky.",
+    "Happy Birthday, my love.",
     "My bestie. My person.",
-    "The girl who somehow stole my heart",
-    "without even trying.",
+    "The girl who stole my heart completely.",
     "",
-    "From me to you,",
-    "with all the love I have,",
+    "I love you.",
+    "I love you.",
+    "I love you.",
     "",
+    "Forever yours,",
     "Prexzy 💙"
   ];
   
@@ -786,13 +863,13 @@ document.getElementById('btn-message').addEventListener('click',function(){
     } else if (text === "Prexzy 💙") {
       p.style.cssText = 'color:rgba(201,168,76,0.9);font-size:20px;font-family:Cinzel;letter-spacing:2px;margin-top:20px;';
       p.textContent = text;
-    } else if (text.includes("You're beautiful")) {
+    } else if (text.includes("I love you") && text.length < 20) {
       p.className = 'message-line gold';
       p.textContent = text;
     } else if (text.includes("stole my heart")) {
       p.className = 'message-line strong';
       p.textContent = text;
-    } else if (text.includes("From me to you")) {
+    } else if (text.includes("Forever yours")) {
       p.style.cssText = 'color:rgba(106,176,255,0.8);font-size:16px;letter-spacing:2px;margin-top:15px;';
       p.textContent = text;
     } else {
@@ -806,7 +883,6 @@ document.getElementById('btn-message').addEventListener('click',function(){
   const displayDuration = 2500;
   const fadeDuration = 500;
   
-  // Order of balloons to animate: H, B, D, then N, I, C, K, Y
   const balloonOrder = [
     { element: document.querySelector('.mini-balloon.h'), letter: 'H' },
     { element: document.querySelector('.mini-balloon.b'), letter: 'B' },
@@ -822,7 +898,6 @@ document.getElementById('btn-message').addEventListener('click',function(){
   
   function showNextBalloon() {
     if (balloonIndex >= balloonOrder.length) {
-      // All balloons shown, show signature
       document.getElementById('msg-sig').style.display = 'block';
       return;
     }
@@ -833,11 +908,11 @@ document.getElementById('btn-message').addEventListener('click',function(){
     }
     balloonIndex++;
     
-    // Wait 0.8 seconds before showing next balloon
     if (balloonIndex < balloonOrder.length) {
       setTimeout(showNextBalloon, 800);
     } else {
-      // All balloons done, show signature after a short delay
+      // Last balloon (Y) just appeared - trigger confetti!
+      startConfetti();
       setTimeout(() => {
         document.getElementById('msg-sig').style.display = 'block';
       }, 500);
@@ -846,7 +921,6 @@ document.getElementById('btn-message').addEventListener('click',function(){
   
   function showNextLine() {
     if (currentIndex >= lineElements.length) {
-      // All message lines done, now show balloons one by one
       setTimeout(showNextBalloon, 500);
       return;
     }
