@@ -68,38 +68,54 @@
 
     audio { display: none; }
 
-    /* BALLOONS - will float high up, away from banner */
-    .balloons {
-      position: fixed;
-      bottom: -250px;
+    /* BALLOONS - hidden initially, will appear after message */
+    .balloons-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 30px;
+      margin-bottom: 20px;
       opacity: 0;
-      z-index: 98;
-      width: 70px;
-      height: 140px;
+      transition: opacity 0.8s ease;
+    }
+    .balloons-container.show {
+      opacity: 1;
+    }
+    .mini-balloon {
+      width: 55px;
+      height: 110px;
       background-repeat: no-repeat;
       background-size: contain;
-      pointer-events: none;
-      transition: bottom 3s cubic-bezier(0.22, 0.88, 0.36, 1), opacity 0.8s ease;
+      background-position: center;
+      position: relative;
+      display: inline-block;
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
     }
-    .balloons h2 {
+    .mini-balloon:hover {
+      transform: scale(0.9);
+    }
+    .mini-balloon h2 {
       text-transform: uppercase;
       font-family: 'Cinzel', serif;
-      font-size: 32px;
-      text-shadow: 0 0 20px currentColor;
-      display: none;
+      font-size: 28px;
+      text-shadow: 0 0 15px currentColor;
       text-align: center;
-      line-height: 140px;
+      line-height: 110px;
       margin: 0;
+      color: inherit;
     }
-    /* Spread balloons wider across screen */
-    #b1 { background-image: url('b1.png'); left: 3%; }
-    #b2 { background-image: url('b2.png'); left: 15%; }
-    #b3 { background-image: url('b3.png'); left: 27%; }
-    #b4 { background-image: url('b4.png'); left: 39%; }
-    #b5 { background-image: url('b5.png'); left: 51%; }
-    #b6 { background-image: url('b6.png'); left: 63%; }
-    #b7 { background-image: url('b7.png'); left: 75%; }
-    #b8 { background-image: url('b8.png'); left: 87%; }
+    /* Balloon colors */
+    .mini-balloon.h { background-image: url('b1.png'); }
+    .mini-balloon.b { background-image: url('b2.png'); }
+    .mini-balloon.d { background-image: url('b3.png'); }
+    .mini-balloon.n { background-image: url('b4.png'); }
+    .mini-balloon.i { background-image: url('b5.png'); }
+    .mini-balloon.c { background-image: url('b6.png'); }
+    .mini-balloon.k { background-image: url('b7.png'); }
+    .mini-balloon.y { background-image: url('b8.png'); }
 
     .balloon-border {
       position: fixed;
@@ -108,8 +124,8 @@
       opacity: 0.4;
       z-index: 9999;
       transition: top 2s cubic-bezier(0.22,1,0.36,1);
+      display: none;
     }
-    .balloon-border.risen { top: 0; }
 
     /* MAIN */
     #main-container {
@@ -453,8 +469,9 @@
         margin: 0 auto;
         left: 0;
       }
-      .balloons h2 { font-size: 22px; line-height: 120px; }
-      .balloons { width: 50px; height: 120px; }
+      .mini-balloon { width: 40px; height: 80px; }
+      .mini-balloon h2 { font-size: 20px; line-height: 80px; }
+      .balloons-container { gap: 4px; }
     }
   </style>
 </head>
@@ -468,18 +485,6 @@
 </div>
 
 <audio id="song" loop><source src="hbd.mp3"></audio>
-
-<!-- 8 BALLOONS for HBD NICKY -->
-<div class="balloons" id="b1"><h2 style="color:#6ab0ff;">H</h2></div>
-<div class="balloons" id="b2"><h2 style="color:#c9a84c;">B</h2></div>
-<div class="balloons" id="b3"><h2 style="color:#4a90d9;">D</h2></div>
-<div class="balloons" id="b4"><h2 style="color:#6ab0ff;">N</h2></div>
-<div class="balloons" id="b5"><h2 style="color:#c9a84c;">I</h2></div>
-<div class="balloons" id="b6"><h2 style="color:#4a90d9;">C</h2></div>
-<div class="balloons" id="b7"><h2 style="color:#6ab0ff;">K</h2></div>
-<div class="balloons" id="b8"><h2 style="color:#c9a84c;">Y</h2></div>
-
-<img src="Balloon-Border.png" class="balloon-border" id="balloon-border">
 
 <div id="main-container">
 
@@ -521,6 +526,17 @@
     <div class="divider"><span class="divider-gem">✦</span></div>
     <div class="message-card" id="message-card">
       <div id="message-lines-container"></div>
+      <!-- Balloons will appear here after message finishes -->
+      <div class="balloons-container" id="balloons-container">
+        <div class="mini-balloon h"><h2 style="color:#6ab0ff;">H</h2></div>
+        <div class="mini-balloon b"><h2 style="color:#c9a84c;">B</h2></div>
+        <div class="mini-balloon d"><h2 style="color:#4a90d9;">D</h2></div>
+        <div class="mini-balloon n"><h2 style="color:#6ab0ff;">N</h2></div>
+        <div class="mini-balloon i"><h2 style="color:#c9a84c;">I</h2></div>
+        <div class="mini-balloon c"><h2 style="color:#4a90d9;">C</h2></div>
+        <div class="mini-balloon k"><h2 style="color:#6ab0ff;">K</h2></div>
+        <div class="mini-balloon y"><h2 style="color:#c9a84c;">Y</h2></div>
+      </div>
       <div class="message-signature" id="msg-sig">
         <p>✦ FROM PREXZY, WITH ALL MY HEART ✦</p>
       </div>
@@ -535,7 +551,6 @@
     <button class="btn-wish" id="btn-lights">✦ Turn On Lights</button>
     <button class="btn-wish" id="btn-play"    style="display:none;">♪ Play Music</button>
     <button class="btn-wish" id="btn-banner"  style="display:none;">🎊 Let's Decorate</button>
-    <button class="btn-wish" id="btn-balloons"style="display:none;">🎈 Fly With Balloons</button>
     <button class="btn-wish" id="btn-cake"    style="display:none;">🎂 Show the Cake</button>
     <button class="btn-wish" id="btn-candle"  style="display:none;">🕯 Light the Candle</button>
     <button class="btn-wish" id="btn-wish-btn"style="display:none;">💙 Happy Birthday</button>
@@ -603,8 +618,7 @@ let bgI=0;
 function nextBg(){ bgI=(bgI+1)%bgs.length; document.body.style.backgroundColor=bgs[bgI]; }
 
 /* Helper to show next button and hide current */
-let currentButtonId = 'btn-lights';
-const buttonOrder = ['btn-lights', 'btn-play', 'btn-banner', 'btn-balloons', 'btn-cake', 'btn-candle', 'btn-wish-btn', 'btn-message'];
+const buttonOrder = ['btn-lights', 'btn-play', 'btn-banner', 'btn-cake', 'btn-candle', 'btn-wish-btn', 'btn-message'];
 
 function showNextButton(currentId) {
   const currentIdx = buttonOrder.indexOf(currentId);
@@ -648,24 +662,6 @@ document.getElementById('btn-banner').addEventListener('click',function(){
   this.style.display = 'none';
 });
 
-/* BALLOONS - fly high up, away from banner */
-document.getElementById('btn-balloons').addEventListener('click',function(){
-  this.disabled=true; this.classList.add('active');
-  const balloons = document.querySelectorAll('.balloons');
-  balloons.forEach((balloon, index) => {
-    setTimeout(() => {
-      balloon.querySelector('h2').style.display = 'block';
-      balloon.style.bottom = '85%';
-      balloon.style.opacity = '0.9';
-    }, index * 250);
-  });
-  document.getElementById('balloon-border').classList.add('risen');
-  setTimeout(()=>{
-    showNextButton('btn-balloons');
-  },2800);
-  this.style.display = 'none';
-});
-
 /* CAKE */
 document.getElementById('btn-cake').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
@@ -698,7 +694,7 @@ document.getElementById('btn-wish-btn').addEventListener('click',function(){
   this.style.display = 'none';
 });
 
-/* ROMANTIC HEARTFELT MESSAGE FROM PREXZY */
+/* ROMANTIC HEARTFELT MESSAGE FROM PREXZY WITH BALLOONS AT THE END */
 document.getElementById('btn-message').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   this.style.display = 'none';
@@ -707,7 +703,7 @@ document.getElementById('btn-message').addEventListener('click',function(){
   sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),100);
   
-  // A natural, romantic, heartfelt message from Prexzy to Nicky
+  // Natural, romantic message
   const messageLinesArray = [
     "Nicky, my dearest bestie,",
     "",
@@ -812,6 +808,10 @@ document.getElementById('btn-message').addEventListener('click',function(){
   
   function showNextLine() {
     if (currentIndex >= lineElements.length) {
+      // All message lines done, now show the balloons!
+      const balloonsContainer = document.getElementById('balloons-container');
+      balloonsContainer.classList.add('show');
+      // Also show signature
       document.getElementById('msg-sig').style.display = 'block';
       return;
     }
