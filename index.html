@@ -68,46 +68,50 @@
 
     audio { display: none; }
 
-    /* BALLOONS - hidden initially, will appear after message */
+    /* BALLOONS inside message box */
     .balloons-container {
-      position: relative;
       display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px;
+      gap: 15px;
       margin-top: 30px;
       margin-bottom: 20px;
-      opacity: 0;
-      transition: opacity 0.8s ease;
+      min-height: 180px;
     }
-    .balloons-container.show {
-      opacity: 1;
+    .balloon-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .mini-balloon {
-      width: 55px;
-      height: 110px;
+      width: 60px;
+      height: 120px;
       background-repeat: no-repeat;
       background-size: contain;
       background-position: center;
       position: relative;
       display: inline-block;
-      transform: scale(0.8);
-      transition: transform 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
     }
-    .mini-balloon:hover {
-      transform: scale(0.9);
+    .mini-balloon.show {
+      opacity: 1;
+      transform: translateY(0);
     }
     .mini-balloon h2 {
       text-transform: uppercase;
       font-family: 'Cinzel', serif;
-      font-size: 28px;
+      font-size: 30px;
       text-shadow: 0 0 15px currentColor;
       text-align: center;
-      line-height: 110px;
+      line-height: 120px;
       margin: 0;
       color: inherit;
     }
-    /* Balloon colors */
+    /* Balloon backgrounds */
     .mini-balloon.h { background-image: url('b1.png'); }
     .mini-balloon.b { background-image: url('b2.png'); }
     .mini-balloon.d { background-image: url('b3.png'); }
@@ -116,16 +120,6 @@
     .mini-balloon.c { background-image: url('b6.png'); }
     .mini-balloon.k { background-image: url('b7.png'); }
     .mini-balloon.y { background-image: url('b8.png'); }
-
-    .balloon-border {
-      position: fixed;
-      top: 100%;
-      width: 100%;
-      opacity: 0.4;
-      z-index: 9999;
-      transition: top 2s cubic-bezier(0.22,1,0.36,1);
-      display: none;
-    }
 
     /* MAIN */
     #main-container {
@@ -469,9 +463,9 @@
         margin: 0 auto;
         left: 0;
       }
-      .mini-balloon { width: 40px; height: 80px; }
-      .mini-balloon h2 { font-size: 20px; line-height: 80px; }
-      .balloons-container { gap: 4px; }
+      .mini-balloon { width: 45px; height: 90px; }
+      .mini-balloon h2 { font-size: 22px; line-height: 90px; }
+      .balloon-row { gap: 6px; }
     }
   </style>
 </head>
@@ -526,17 +520,23 @@
     <div class="divider"><span class="divider-gem">✦</span></div>
     <div class="message-card" id="message-card">
       <div id="message-lines-container"></div>
-      <!-- Balloons will appear here after message finishes -->
+      
+      <!-- Balloons container - 2 lines: HBD and NICKY -->
       <div class="balloons-container" id="balloons-container">
-        <div class="mini-balloon h"><h2 style="color:#6ab0ff;">H</h2></div>
-        <div class="mini-balloon b"><h2 style="color:#c9a84c;">B</h2></div>
-        <div class="mini-balloon d"><h2 style="color:#4a90d9;">D</h2></div>
-        <div class="mini-balloon n"><h2 style="color:#6ab0ff;">N</h2></div>
-        <div class="mini-balloon i"><h2 style="color:#c9a84c;">I</h2></div>
-        <div class="mini-balloon c"><h2 style="color:#4a90d9;">C</h2></div>
-        <div class="mini-balloon k"><h2 style="color:#6ab0ff;">K</h2></div>
-        <div class="mini-balloon y"><h2 style="color:#c9a84c;">Y</h2></div>
+        <div class="balloon-row" id="row1">
+          <div class="mini-balloon h" data-letter="H"><h2 style="color:#6ab0ff;">H</h2></div>
+          <div class="mini-balloon b" data-letter="B"><h2 style="color:#c9a84c;">B</h2></div>
+          <div class="mini-balloon d" data-letter="D"><h2 style="color:#4a90d9;">D</h2></div>
+        </div>
+        <div class="balloon-row" id="row2">
+          <div class="mini-balloon n" data-letter="N"><h2 style="color:#6ab0ff;">N</h2></div>
+          <div class="mini-balloon i" data-letter="I"><h2 style="color:#c9a84c;">I</h2></div>
+          <div class="mini-balloon c" data-letter="C"><h2 style="color:#4a90d9;">C</h2></div>
+          <div class="mini-balloon k" data-letter="K"><h2 style="color:#6ab0ff;">K</h2></div>
+          <div class="mini-balloon y" data-letter="Y"><h2 style="color:#c9a84c;">Y</h2></div>
+        </div>
       </div>
+      
       <div class="message-signature" id="msg-sig">
         <p>✦ FROM PREXZY, WITH ALL MY HEART ✦</p>
       </div>
@@ -694,7 +694,7 @@ document.getElementById('btn-wish-btn').addEventListener('click',function(){
   this.style.display = 'none';
 });
 
-/* ROMANTIC HEARTFELT MESSAGE FROM PREXZY WITH BALLOONS AT THE END */
+/* ROMANTIC MESSAGE WITH BALLOON SEQUENCE - EACH BALLOON FLOATS IN ONE BY ONE */
 document.getElementById('btn-message').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   this.style.display = 'none';
@@ -703,7 +703,7 @@ document.getElementById('btn-message').addEventListener('click',function(){
   sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),100);
   
-  // Natural, romantic message
+  // Heartfelt message
   const messageLinesArray = [
     "Nicky, my dearest bestie,",
     "",
@@ -727,7 +727,7 @@ document.getElementById('btn-message').addEventListener('click',function(){
     "You're not just sweet. You're magic.",
     "",
     "I've noticed the little things about you.",
-    "The way your eyes probably light up when you're excited.",
+    "The way your eyes light up when you're excited.",
     "The way you say certain words.",
     "The way you care so deeply without even realizing it.",
     "And yeah, I pay attention.",
@@ -806,13 +806,48 @@ document.getElementById('btn-message').addEventListener('click',function(){
   const displayDuration = 2500;
   const fadeDuration = 500;
   
+  // Order of balloons to animate: H, B, D, then N, I, C, K, Y
+  const balloonOrder = [
+    { element: document.querySelector('.mini-balloon.h'), letter: 'H' },
+    { element: document.querySelector('.mini-balloon.b'), letter: 'B' },
+    { element: document.querySelector('.mini-balloon.d'), letter: 'D' },
+    { element: document.querySelector('.mini-balloon.n'), letter: 'N' },
+    { element: document.querySelector('.mini-balloon.i'), letter: 'I' },
+    { element: document.querySelector('.mini-balloon.c'), letter: 'C' },
+    { element: document.querySelector('.mini-balloon.k'), letter: 'K' },
+    { element: document.querySelector('.mini-balloon.y'), letter: 'Y' }
+  ];
+  
+  let balloonIndex = 0;
+  
+  function showNextBalloon() {
+    if (balloonIndex >= balloonOrder.length) {
+      // All balloons shown, show signature
+      document.getElementById('msg-sig').style.display = 'block';
+      return;
+    }
+    
+    const currentBalloon = balloonOrder[balloonIndex];
+    if (currentBalloon.element) {
+      currentBalloon.element.classList.add('show');
+    }
+    balloonIndex++;
+    
+    // Wait 0.8 seconds before showing next balloon
+    if (balloonIndex < balloonOrder.length) {
+      setTimeout(showNextBalloon, 800);
+    } else {
+      // All balloons done, show signature after a short delay
+      setTimeout(() => {
+        document.getElementById('msg-sig').style.display = 'block';
+      }, 500);
+    }
+  }
+  
   function showNextLine() {
     if (currentIndex >= lineElements.length) {
-      // All message lines done, now show the balloons!
-      const balloonsContainer = document.getElementById('balloons-container');
-      balloonsContainer.classList.add('show');
-      // Also show signature
-      document.getElementById('msg-sig').style.display = 'block';
+      // All message lines done, now show balloons one by one
+      setTimeout(showNextBalloon, 500);
       return;
     }
     
