@@ -68,30 +68,37 @@
 
     audio { display: none; }
 
-    /* BALLOONS - Now just 3 balloons for HBD */
+    /* BALLOONS - Now 8 balloons for HBD NICKY */
     .balloons {
       position: fixed;
       bottom: -220px;
       opacity: 0;
       z-index: 99;
-      width: 90px;
-      height: 170px;
+      width: 70px;
+      height: 140px;
       background-repeat: no-repeat;
       background-size: contain;
+      pointer-events: none;
     }
     .balloons h2 {
       text-transform: uppercase;
       font-family: 'Cinzel', serif;
-      font-size: 38px;
+      font-size: 32px;
       text-shadow: 0 0 20px currentColor;
       display: none;
       text-align: center;
-      line-height: 170px;
+      line-height: 140px;
+      margin: 0;
     }
-    /* 3 balloons for HBD */
-    #b1 { background-image: url('b1.png'); left: 15%; }
-    #b2 { background-image: url('b2.png'); left: 45%; }
-    #b3 { background-image: url('b3.png'); left: 75%; }
+    /* Position balloons spread across screen */
+    #b1 { background-image: url('b1.png'); left: 5%; }
+    #b2 { background-image: url('b2.png'); left: 16%; }
+    #b3 { background-image: url('b3.png'); left: 27%; }
+    #b4 { background-image: url('b4.png'); left: 38%; }
+    #b5 { background-image: url('b5.png'); left: 49%; }
+    #b6 { background-image: url('b6.png'); left: 60%; }
+    #b7 { background-image: url('b7.png'); left: 71%; }
+    #b8 { background-image: url('b8.png'); left: 82%; }
 
     .balloon-border {
       position: fixed;
@@ -188,6 +195,7 @@
       width: 300px;
       height: 300px;
       margin: 0 auto;
+      z-index: 20;
     }
     .cake:after {
       background: rgba(255,255,255,0.9);
@@ -271,7 +279,7 @@
     .bizcocho:after  { top: 30%; left: 0; }
     .bizcocho:before { top: 60%; left: 0; }
 
-    /* MESSAGE - Typing effect style */
+    /* MESSAGE */
     .message-section {
       display: none;
       padding: 60px 10px 40px;
@@ -318,7 +326,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(18px, 2.4vw, 24px);
       color: #e8edf8;
-      line-height: 1.95;
+      line-height: 1.8;
       display: none;
       opacity: 0;
       text-align: center;
@@ -431,7 +439,7 @@
       background: rgba(201,168,76,0.08);
     }
 
-    /* Mobile responsive - Center cake */
+    /* Mobile responsive */
     @media (max-width: 600px) {
       .message-card { padding: 28px 18px; }
       .btn-wish { font-size: 9.5px; padding: 8px 10px; }
@@ -442,6 +450,8 @@
         margin: 0 auto;
         left: 0;
       }
+      .balloons h2 { font-size: 24px; line-height: 140px; }
+      .balloons { width: 55px; height: 110px; }
     }
   </style>
 </head>
@@ -456,10 +466,15 @@
 
 <audio id="song" loop><source src="hbd.mp3"></audio>
 
-<!-- 3 BALLOONS for HBD -->
+<!-- 8 BALLOONS for HBD NICKY -->
 <div class="balloons" id="b1"><h2 style="color:#6ab0ff;">H</h2></div>
 <div class="balloons" id="b2"><h2 style="color:#c9a84c;">B</h2></div>
 <div class="balloons" id="b3"><h2 style="color:#4a90d9;">D</h2></div>
+<div class="balloons" id="b4"><h2 style="color:#6ab0ff;">N</h2></div>
+<div class="balloons" id="b5"><h2 style="color:#c9a84c;">I</h2></div>
+<div class="balloons" id="b6"><h2 style="color:#4a90d9;">C</h2></div>
+<div class="balloons" id="b7"><h2 style="color:#6ab0ff;">K</h2></div>
+<div class="balloons" id="b8"><h2 style="color:#c9a84c;">Y</h2></div>
 
 <img src="Balloon-Border.png" class="balloon-border" id="balloon-border">
 
@@ -498,14 +513,13 @@
   <div class="message-section" id="message-section">
     <div class="message-header">
       <h1>Happy Birthday</h1>
-      <p class="subtitle">For someone truly irreplaceable</p>
+      <p class="subtitle">For my favourite person 💙</p>
     </div>
     <div class="divider"><span class="divider-gem">✦</span></div>
     <div class="message-card" id="message-card">
-      <!-- Message lines will be shown one by one -->
       <div id="message-lines-container"></div>
       <div class="message-signature" id="msg-sig">
-        <p>✦ &nbsp; MADE WITH LOVE, JUST FOR YOU &nbsp; ✦</p>
+        <p>✦ FOREVER & ALWAYS, YOUR BESTIE ✦</p>
       </div>
     </div>
   </div>
@@ -631,21 +645,22 @@ document.getElementById('btn-banner').addEventListener('click',function(){
   this.style.display = 'none';
 });
 
-/* BALLOONS */
+/* BALLOONS - fly up one by one */
 document.getElementById('btn-balloons').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
-  document.querySelectorAll('.balloons').forEach((b,i)=>{
-    b.querySelector('h2').style.display='block';
-    setTimeout(()=>{
-      b.style.transition=`bottom ${2.4+i*0.12}s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease`;
-      b.style.bottom=`${58+(i%3)*16}px`;
-      b.style.opacity='0.82';
-    },i*110);
+  const balloons = document.querySelectorAll('.balloons');
+  balloons.forEach((balloon, index) => {
+    setTimeout(() => {
+      balloon.querySelector('h2').style.display = 'block';
+      balloon.style.transition = `bottom 2.5s cubic-bezier(0.22,0.88,0.36,1), opacity 0.8s ease`;
+      balloon.style.bottom = `70%`;
+      balloon.style.opacity = '0.9';
+    }, index * 300);
   });
   document.getElementById('balloon-border').classList.add('risen');
   setTimeout(()=>{
     showNextButton('btn-balloons');
-  },2200);
+  },2800);
   this.style.display = 'none';
 });
 
@@ -681,7 +696,7 @@ document.getElementById('btn-wish-btn').addEventListener('click',function(){
   this.style.display = 'none';
 });
 
-/* MESSAGE - LINE BY LINE WITH DISAPPEARING EFFECT */
+/* HEARTFELT BIRTHDAY MESSAGE */
 document.getElementById('btn-message').addEventListener('click',function(){
   this.disabled=true; this.classList.add('active');
   this.style.display = 'none';
@@ -690,73 +705,84 @@ document.getElementById('btn-message').addEventListener('click',function(){
   sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),100);
   
-  // Define all message lines
+  // Personal, warm, heartfelt message for an online bestie
   const messageLinesArray = [
-    "Today, the universe decided to celebrate",
-    "the day you came into this world —",
-    "and honestly, how could it not?",
+    "Okay, so... where do I even start?",
+    "",
     "Happy Birthday, Nicky. 💙",
     "",
-    "I've been trying to find the right words",
-    "to describe what you mean to me,",
-    "and I keep running out of language.",
-    "Because some people are simply beyond words.",
-    "You are one of those people.",
+    "I've been thinking about what to write for days,",
+    "and honestly? Words still don't feel like enough.",
+    "But I'm gonna try anyway, because you deserve to know",
+    "just how much you mean to me.",
     "",
-    "You have this rare and beautiful gift —",
-    "you make everyone around you feel seen,",
-    "feel heard, feel safe.",
-    "In a world that can be loud and unkind,",
-    "you are a quiet and steady kind of warmth.",
-    "The kind that stays.",
+    "We met online, but somehow,",
+    "you've become one of the most real people in my life.",
+    "Isn't that crazy? How distance doesn't matter",
+    "when the connection is this real.",
     "",
-    "Thank you for every conversation,",
-    "every word of encouragement you offered",
-    "when I needed it most —",
-    "even when you had your own storms to weather.",
-    "That is who you are, Nicky.",
-    "Someone who shows up. Every single time.",
+    "You have this thing about you...",
+    "this way of making people feel comfortable,",
+    "like they can just... be themselves around you.",
+    "No pretending. No walls. Just warmth.",
+    "And that's rare, Nicky. Really rare.",
     "",
-    "Your kindness isn't performative.",
-    "It is genuine, deep, and effortless.",
-    "You care in ways most people have forgotten how to.",
-    "And that is not a small thing.",
-    "That is everything.",
+    "You're the kind of person who actually checks up on people.",
+    "Not because you have to, but because you genuinely care.",
+    "You remember the little things.",
+    "You show up. You listen.",
+    "And you make people feel seen in a world",
+    "that often forgets to look.",
     "",
-    "The distance between us changes nothing.",
-    "You are one of the most real friendships I have.",
-    "Online or not, near or far,",
-    "you have carved a place in my life",
-    "that no one else could ever fill.",
+    "I can't even count how many times",
+    "you've made me laugh when I needed it most.",
+    "Or how many late night conversations we've had",
+    "that somehow made everything feel lighter.",
+    "You just get it. You get me.",
+    "And I don't take that for granted.",
     "",
-    "On this birthday, I want you to feel",
-    "every bit of the love you pour into others",
-    "poured right back into you.",
-    "I want you to rest in knowing",
-    "that you are deeply, genuinely treasured —",
-    "not for what you do,",
-    "but simply for who you are.",
+    "You're so much more than just 'an online friend'.",
+    "You're my person. My bestie.",
+    "The one I know I can always count on,",
+    "no matter how many miles are between us.",
     "",
-    "May this year bring you everything",
-    "your beautiful heart deserves.",
-    "Peace. Laughter. Abundance. Joy.",
-    "May every good thing find its way to you.",
-    "May you receive the same softness",
-    "that you so freely give to everyone else.",
+    "I hope today, you feel all the love",
+    "that you give so freely to everyone else,",
+    "coming right back to you ten times over.",
+    "I hope you smile until your cheeks hurt.",
+    "I hope you eat way too much cake.",
+    "I hope you know that somewhere out there,",
+    "someone is celebrating you so hard right now.",
     "",
-    "You deserve the whole sky, Nicky.",
-    "Every star in it.",
-    "Every shade of blue.",
+    "Thank you for being you.",
+    "For being kind when the world is messy.",
+    "For being funny without even trying.",
+    "For being the type of person",
+    "that makes life better just by being in it.",
     "",
-    "Happy Birthday, my dearest friend. 💙",
-    "With all the love in the world —",
-    "always and always."
+    "You deserve every good thing, Nicky.",
+    "Every laugh. Every hug. Every happy moment.",
+    "And I'm so, so grateful that you exist.",
+    "",
+    "So here's to you, my favourite person.",
+    "Here's to more late night talks,",
+    "more inside jokes, more memories,",
+    "and more of... just us.",
+    "",
+    "I love having you in my life.",
+    "And I can't wait to celebrate so many more birthdays with you.",
+    "",
+    "Happy Birthday, Nicky. 💙",
+    "You're truly one of a kind.",
+    "",
+    "With all my love,",
+    "Your bestie, always."
   ];
   
   const container = document.getElementById('message-lines-container');
   container.innerHTML = '';
   
-  // Create span elements for each message line
+  // Create elements for each message line
   const lineElements = [];
   messageLinesArray.forEach((text, idx) => {
     const p = document.createElement('p');
@@ -764,17 +790,17 @@ document.getElementById('btn-message').addEventListener('click',function(){
     if (text === "") {
       p.className = 'message-line spacer';
       p.innerHTML = '&nbsp;';
-    } else if (text.includes("Happy Birthday, Nicky") && !text.includes("dearest")) {
-      p.className = 'message-line strong';
-      p.textContent = text;
-    } else if (text.includes("That is everything")) {
-      p.className = 'message-line strong';
-      p.textContent = text;
-    } else if (text.includes("Happy Birthday, my dearest friend")) {
+    } else if (text.includes("Happy Birthday, Nicky. 💙") && text.length < 30) {
       p.className = 'message-line gold';
       p.textContent = text;
-    } else if (text.includes("With all the love")) {
-      p.style.cssText = 'color:rgba(106,176,255,0.65);font-size:16px;letter-spacing:2px;';
+    } else if (text.includes("You're truly one of a kind")) {
+      p.className = 'message-line strong';
+      p.textContent = text;
+    } else if (text.includes("With all my love")) {
+      p.style.cssText = 'color:rgba(201,168,76,0.9);font-size:18px;font-family:Cinzel;letter-spacing:2px;';
+      p.textContent = text;
+    } else if (text.includes("Your bestie, always")) {
+      p.style.cssText = 'color:rgba(106,176,255,0.8);font-size:16px;letter-spacing:2px;font-family:Cinzel;';
       p.textContent = text;
     } else {
       p.textContent = text;
@@ -784,47 +810,39 @@ document.getElementById('btn-message').addEventListener('click',function(){
   });
   
   let currentIndex = 0;
-  const displayDuration = 2200; // Time each line stays visible
-  const fadeDuration = 500; // Time for fade transitions
+  const displayDuration = 2400;
+  const fadeDuration = 500;
   
   function showNextLine() {
     if (currentIndex >= lineElements.length) {
-      // All lines done, show signature
       document.getElementById('msg-sig').style.display = 'block';
       return;
     }
     
     const currentLine = lineElements[currentIndex];
     
-    // If it's a spacer, just mark as visible and move on quickly
     if (currentLine.classList.contains('spacer')) {
       currentLine.classList.add('visible');
       currentIndex++;
-      setTimeout(showNextLine, 200);
+      setTimeout(showNextLine, 150);
       return;
     }
     
-    // Show current line
     currentLine.classList.add('visible');
     
-    // Set timeout to hide this line and show next
     setTimeout(() => {
-      // Hide current line with fade out
       currentLine.classList.remove('visible');
       currentLine.classList.add('hiding');
       
-      // After fade out, remove it from display
       setTimeout(() => {
         currentLine.style.display = 'none';
         currentLine.classList.remove('hiding');
         currentIndex++;
-        // Show next line
         showNextLine();
       }, fadeDuration);
     }, displayDuration);
   }
   
-  // Start showing lines
   setTimeout(showNextLine, 300);
 });
 </script>
